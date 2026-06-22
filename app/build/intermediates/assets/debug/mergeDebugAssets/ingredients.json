@@ -1,0 +1,514 @@
+[
+  {
+    "displayName": "Gelatin",
+    "normalizedName": "gelatin",
+    "aliases": "gelatine|e441|hydrolyzed collagen|collagen",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Derived from boiled animal bones, skin, and connective tissue (cattle, pigs)",
+    "category": "Gelling Agent"
+  },
+  {
+    "displayName": "Carmine",
+    "normalizedName": "carmine",
+    "aliases": "e120|cochineal|natural red 4|carminic acid|crimson lake|cochineal extract",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Red dye extracted from crushed cochineal beetles",
+    "category": "Colorant"
+  },
+  {
+    "displayName": "Casein",
+    "normalizedName": "casein",
+    "aliases": "caseinate|sodium caseinate|calcium caseinate|potassium caseinate|ammonium caseinate",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Main protein in cow's milk",
+    "category": "Dairy Derivative"
+  },
+  {
+    "displayName": "Whey",
+    "normalizedName": "whey",
+    "aliases": "whey powder|whey protein|whey concentrate|whey isolate|sweet whey|acid whey",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Liquid by-product of cheese making, from cow's milk",
+    "category": "Dairy Derivative"
+  },
+  {
+    "displayName": "Lecithin",
+    "normalizedName": "lecithin",
+    "aliases": "e322|egg lecithin|sunflower lecithin|soy lecithin|soya lecithin",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Can be soy-derived (vegan) or egg/animal-derived. Check the source listed on the label.",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Mono- and Diglycerides of Fatty Acids",
+    "normalizedName": "mono and diglycerides of fatty acids",
+    "aliases": "e471|monoglycerides|diglycerides|glyceryl monostearate|mono diglycerides",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Can be plant or animal fat origin. No way to determine from label alone.",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Beeswax",
+    "normalizedName": "beeswax",
+    "aliases": "e901|white beeswax|yellow beeswax|cera alba|cera flava",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Produced by honeybees",
+    "category": "Glazing Agent"
+  },
+  {
+    "displayName": "Shellac",
+    "normalizedName": "shellac",
+    "aliases": "e904|lac|confectioners glaze|resinous glaze|lac resin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Resin secreted by the lac bug (Kerria lacca)",
+    "category": "Glazing Agent"
+  },
+  {
+    "displayName": "Isinglass",
+    "normalizedName": "isinglass",
+    "aliases": "fish gelatin|fish glue|sturgeon gelatin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Dried swim bladder of fish, used as a clarifying agent",
+    "category": "Clarifying Agent"
+  },
+  {
+    "displayName": "Lactose",
+    "normalizedName": "lactose",
+    "aliases": "milk sugar|lactulose",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Sugar derived from cow's milk",
+    "category": "Dairy Derivative"
+  },
+  {
+    "displayName": "Bone Phosphate",
+    "normalizedName": "bone phosphate",
+    "aliases": "e542|tricalcium phosphate",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Anti-caking agent derived from animal bones",
+    "category": "Anti-caking Agent"
+  },
+  {
+    "displayName": "Lanolin",
+    "normalizedName": "lanolin",
+    "aliases": "wool wax|wool grease|e913|adeps lanae|lanolin alcohol",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Wax secreted by sheep's sebaceous glands",
+    "category": "Softener"
+  },
+  {
+    "displayName": "L-Cysteine",
+    "normalizedName": "l cysteine",
+    "aliases": "e920|cysteine|cystine|l-cysteine hydrochloride",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Often sourced from human hair or duck feathers; sometimes synthetic. Check with manufacturer.",
+    "category": "Flour Improver"
+  },
+  {
+    "displayName": "Rennet",
+    "normalizedName": "rennet",
+    "aliases": "animal rennet|chymosin|rennin|pepsin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Enzyme complex extracted from the stomach lining of ruminant mammals",
+    "category": "Coagulant"
+  },
+  {
+    "displayName": "Albumin",
+    "normalizedName": "albumin",
+    "aliases": "egg albumin|blood albumin|serum albumin|egg white",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Protein found in egg whites or animal blood",
+    "category": "Protein"
+  },
+  {
+    "displayName": "Tallow",
+    "normalizedName": "tallow",
+    "aliases": "beef tallow|mutton tallow|suet|rendered fat",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Rendered fat from cattle or sheep",
+    "category": "Fat"
+  },
+  {
+    "displayName": "Lard",
+    "normalizedName": "lard",
+    "aliases": "pig fat|pork fat|pork lard|rendered pork fat",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Rendered fat from pigs",
+    "category": "Fat"
+  },
+  {
+    "displayName": "Honey",
+    "normalizedName": "honey",
+    "aliases": "honey powder|dried honey|blossom honey|raw honey|organic honey",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Produced by honeybees",
+    "category": "Sweetener"
+  },
+  {
+    "displayName": "Royal Jelly",
+    "normalizedName": "royal jelly",
+    "aliases": "bee milk|apilak",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Secretion produced by worker honeybees to feed the queen",
+    "category": "Bee Product"
+  },
+  {
+    "displayName": "Propolis",
+    "normalizedName": "propolis",
+    "aliases": "bee glue|bee propolis|bee resin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Resinous mixture produced by honeybees from tree resins",
+    "category": "Bee Product"
+  },
+  {
+    "displayName": "Lysozyme",
+    "normalizedName": "lysozyme",
+    "aliases": "e1105|hen egg white lysozyme",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Enzyme derived from egg whites, used as a preservative in some cheeses",
+    "category": "Preservative"
+  },
+  {
+    "displayName": "Lactitol",
+    "normalizedName": "lactitol",
+    "aliases": "e966|lactit",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Sugar alcohol derived from lactose (milk sugar)",
+    "category": "Sweetener"
+  },
+  {
+    "displayName": "Milk",
+    "normalizedName": "milk",
+    "aliases": "whole milk|skim milk|skimmed milk|full fat milk|dried milk|milk solids|milk powder|nonfat milk|semi skimmed milk",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Dairy product from cows",
+    "category": "Dairy"
+  },
+  {
+    "displayName": "Butter",
+    "normalizedName": "butter",
+    "aliases": "butterfat|butter oil|clarified butter|ghee|anhydrous butter",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Dairy fat from cow's milk",
+    "category": "Dairy"
+  },
+  {
+    "displayName": "Cream",
+    "normalizedName": "cream",
+    "aliases": "heavy cream|double cream|single cream|whipping cream|sour cream|creme fraiche",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Dairy product from cow's milk",
+    "category": "Dairy"
+  },
+  {
+    "displayName": "Cheese",
+    "normalizedName": "cheese",
+    "aliases": "cheese powder|cheddar|parmesan|mozzarella|processed cheese",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Dairy product made from animal milk",
+    "category": "Dairy"
+  },
+  {
+    "displayName": "Eggs",
+    "normalizedName": "eggs",
+    "aliases": "egg|whole egg|egg yolk|egg white|dried egg|egg powder|liquid egg",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Animal product from hens",
+    "category": "Egg"
+  },
+  {
+    "displayName": "Anchovy",
+    "normalizedName": "anchovy",
+    "aliases": "anchovies|anchovy paste|anchovy extract|fish sauce",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Small saltwater fish",
+    "category": "Fish"
+  },
+  {
+    "displayName": "Carnauba Wax",
+    "normalizedName": "carnauba wax",
+    "aliases": "e903|brazil wax|palm wax",
+    "veganStatus": "VEGAN",
+    "reason": "Plant-based wax from the leaves of the carnauba palm",
+    "category": "Glazing Agent"
+  },
+  {
+    "displayName": "Cochineal",
+    "normalizedName": "cochineal",
+    "aliases": "e120|carmine|natural red 4|cochineal dye",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Red dye made from crushed cochineal insects",
+    "category": "Colorant"
+  },
+  {
+    "displayName": "Glycerol",
+    "normalizedName": "glycerol",
+    "aliases": "e422|glycerin|glycerine",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Can be plant-derived (vegan) or animal fat-derived. Check with manufacturer.",
+    "category": "Humectant"
+  },
+  {
+    "displayName": "Stearic Acid",
+    "normalizedName": "stearic acid",
+    "aliases": "e570|octadecanoic acid",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Can be derived from plant or animal fats. Check with manufacturer.",
+    "category": "Fatty Acid"
+  },
+  {
+    "displayName": "Vitamin D3",
+    "normalizedName": "vitamin d3",
+    "aliases": "cholecalciferol|vitaminD3|d3",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Often derived from lanolin (sheep wool). Vegan D3 from lichen exists but is less common.",
+    "category": "Vitamin"
+  },
+  {
+    "displayName": "Omega-3 Fatty Acids",
+    "normalizedName": "omega 3",
+    "aliases": "fish oil|cod liver oil|dha|epa|omega3",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Typically derived from fish oil unless labelled as algal/plant-based",
+    "category": "Fatty Acid"
+  },
+  {
+    "displayName": "Lactic Acid",
+    "normalizedName": "lactic acid",
+    "aliases": "e270",
+    "veganStatus": "VEGAN",
+    "reason": "Typically fermented from plant sugars; almost always vegan",
+    "category": "Acid"
+  },
+  {
+    "displayName": "Lactylates",
+    "normalizedName": "lactylates",
+    "aliases": "e481|e482|sodium stearoyl lactylate|calcium stearoyl lactylate|ssl|csl",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Made from lactic acid and stearic acid; stearic acid may be animal-derived",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Diacetyltartaric Acid Ester of Monoglycerides",
+    "normalizedName": "diacetyltartaric acid ester of monoglycerides",
+    "aliases": "e472e|datem",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Made from monoglycerides which may be animal-derived",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Polysorbates",
+    "normalizedName": "polysorbate",
+    "aliases": "e432|e433|e434|e435|e436|polysorbate 20|polysorbate 60|polysorbate 80",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Made from sorbitol and fatty acids; fatty acids may be animal-derived",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Pepsin",
+    "normalizedName": "pepsin",
+    "aliases": "porcine pepsin|gastric enzyme",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Digestive enzyme from pig or calf stomach lining",
+    "category": "Enzyme"
+  },
+  {
+    "displayName": "Confectioner's Glaze",
+    "normalizedName": "confectioners glaze",
+    "aliases": "shellac|resinous glaze|lac|pharmaceutical glaze",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Made from shellac, a resin secreted by the lac bug",
+    "category": "Glazing Agent"
+  },
+  {
+    "displayName": "Beef",
+    "normalizedName": "beef",
+    "aliases": "beef meat|ground beef|minced beef|beef mince|beef steak|roast beef|beef extract|beef fat|beef liver|beef suet|corned beef|beef broth|beef stock|beef powder|dried beef",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from cattle",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Pork",
+    "normalizedName": "pork",
+    "aliases": "pork meat|ground pork|minced pork|pork mince|pork fat|pork liver|pork rinds|pork belly|bacon|ham|prosciutto|pancetta|salami|pepperoni|sausage|chorizo|pork broth|pork stock|pork extract|pork powder",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from pigs",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Chicken",
+    "normalizedName": "chicken",
+    "aliases": "chicken meat|chicken breast|chicken thigh|chicken leg|chicken wing|chicken liver|chicken fat|roast chicken|chicken broth|chicken stock|chicken extract|chicken powder|ground chicken|minced chicken|poultry",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from chickens",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Turkey",
+    "normalizedName": "turkey",
+    "aliases": "turkey meat|ground turkey|turkey breast|turkey broth|turkey stock|turkey extract|turkey fat",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from turkeys",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Lamb",
+    "normalizedName": "lamb",
+    "aliases": "lamb meat|lamb chop|ground lamb|minced lamb|mutton|lamb liver|lamb fat|lamb broth|lamb stock",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from sheep",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Veal",
+    "normalizedName": "veal",
+    "aliases": "veal meat|veal liver|veal broth|veal stock",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from young calves",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Duck",
+    "normalizedName": "duck",
+    "aliases": "duck meat|duck breast|duck leg|duck fat|duck liver|duck broth|duck stock|duck confit",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from ducks",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Venison",
+    "normalizedName": "venison",
+    "aliases": "deer meat|deer|game meat",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from deer",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Rabbit",
+    "normalizedName": "rabbit",
+    "aliases": "rabbit meat|hare",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from rabbits",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Fish",
+    "normalizedName": "fish",
+    "aliases": "fish meat|fish fillet|fish flesh|fish extract|fish broth|fish stock|fish powder|fish oil|fish meal|white fish|oily fish|dried fish|smoked fish",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Flesh of fish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Salmon",
+    "normalizedName": "salmon",
+    "aliases": "atlantic salmon|smoked salmon|salmon fillet|salmon extract|salmon oil",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Tuna",
+    "normalizedName": "tuna",
+    "aliases": "skipjack tuna|yellowfin tuna|albacore tuna|canned tuna|tuna extract",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Cod",
+    "normalizedName": "cod",
+    "aliases": "cod fish|cod fillet|cod liver|cod liver oil",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Shrimp",
+    "normalizedName": "shrimp",
+    "aliases": "prawn|prawns|shrimps|king prawn|tiger prawn|shrimp extract|shrimp powder|dried shrimp",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Crustacean shellfish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Lobster",
+    "normalizedName": "lobster",
+    "aliases": "lobster meat|lobster extract|lobster bisque",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Crustacean shellfish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Crab",
+    "normalizedName": "crab",
+    "aliases": "crab meat|crab extract|crab stick|imitation crab|surimi",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Crustacean shellfish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Squid",
+    "normalizedName": "squid",
+    "aliases": "calamari|octopus|cuttlefish|squid ink",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Cephalopod mollusc",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Clam",
+    "normalizedName": "clam",
+    "aliases": "clams|mussel|mussels|oyster|oysters|scallop|scallops|abalone|cockle|cockles",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Bivalve molluscs",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Meat",
+    "normalizedName": "meat",
+    "aliases": "meat extract|meat broth|meat stock|meat powder|meat protein|animal meat|mechanically recovered meat|mrm|mechanically separated meat|msm",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Generic animal flesh",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Bone Broth",
+    "normalizedName": "bone broth",
+    "aliases": "beef bone broth|chicken bone broth|bone stock|marrow",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Broth made from simmering animal bones",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Anchovies",
+    "normalizedName": "anchovies",
+    "aliases": "anchovy|anchovy paste|anchovy extract|fish sauce|worcestershire sauce",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Small saltwater fish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Sardine",
+    "normalizedName": "sardine",
+    "aliases": "sardines|pilchard|pilchards|herring|mackerel|sprat",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Tilapia",
+    "normalizedName": "tilapia",
+    "aliases": "basa|pangasius|catfish|perch|haddock|plaice|pollock|sea bass|sea bream|trout",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Animal Fat",
+    "normalizedName": "animal fat",
+    "aliases": "animal shortening|mixed fat|fat|rendered animal fat",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fat derived from animal sources",
+    "category": "Fat"
+  }
+]
