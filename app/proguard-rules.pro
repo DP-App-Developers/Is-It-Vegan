@@ -1,0 +1,3 @@
+-keep class com.isitveganapp.data.local.IngredientJsonModel { *; }
+-keep class com.isitveganapp.data.model.** { *; }
+-keepattributes *Annotation*
