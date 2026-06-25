@@ -218,7 +218,7 @@
   {
     "displayName": "Anchovy",
     "normalizedName": "anchovy",
-    "aliases": "anchovies|anchovy paste|anchovy extract|fish sauce",
+    "aliases": "anchovies|anchovy paste|anchovy extract|fish sauce|worcestershire sauce",
     "veganStatus": "NOT_VEGAN",
     "reason": "Small saltwater fish",
     "category": "Fish"
@@ -464,14 +464,6 @@
     "category": "Meat"
   },
   {
-    "displayName": "Anchovies",
-    "normalizedName": "anchovies",
-    "aliases": "anchovy|anchovy paste|anchovy extract|fish sauce|worcestershire sauce",
-    "veganStatus": "NOT_VEGAN",
-    "reason": "Small saltwater fish",
-    "category": "Seafood"
-  },
-  {
     "displayName": "Sardine",
     "normalizedName": "sardine",
     "aliases": "sardines|pilchard|pilchards|herring|mackerel|sprat",
@@ -494,5 +486,205 @@
     "veganStatus": "NOT_VEGAN",
     "reason": "Fat derived from animal sources",
     "category": "Fat"
+  },
+  {
+    "displayName": "Buttermilk",
+    "normalizedName": "buttermilk",
+    "aliases": "buttermilk powder|dried buttermilk|cultured buttermilk|buttermilk solids",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "By-product of churning butter from cow's milk",
+    "category": "Dairy"
+  },
+  {
+    "displayName": "Condensed Milk",
+    "normalizedName": "condensed milk",
+    "aliases": "evaporated milk|sweetened condensed milk|whole condensed milk|skimmed condensed milk|condensed skim milk",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Concentrated cow's milk",
+    "category": "Dairy"
+  },
+  {
+    "displayName": "Lactalbumin",
+    "normalizedName": "lactalbumin",
+    "aliases": "alpha lactalbumin|whey protein alpha|milk albumin|lactalbumin phosphate",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Protein derived from cow's milk whey",
+    "category": "Dairy Derivative"
+  },
+  {
+    "displayName": "Lactoglobulin",
+    "normalizedName": "lactoglobulin",
+    "aliases": "beta lactoglobulin|whey protein beta|milk globulin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Protein derived from cow's milk whey",
+    "category": "Dairy Derivative"
+  },
+  {
+    "displayName": "Goat's Milk",
+    "normalizedName": "goat milk",
+    "aliases": "goats milk|goat's milk|goat milk powder|goat cheese|goat's cheese|chevre|goat yogurt|goat yoghurt|sheep milk|sheep's milk|ewe's milk|ewes milk",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Milk from goats or sheep",
+    "category": "Dairy"
+  },
+  {
+    "displayName": "Ovalbumin",
+    "normalizedName": "ovalbumin",
+    "aliases": "egg white protein|egg protein|ovomucin|ovomucoid|conalbumin|ovotransferrin|lysozyme egg",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Protein from egg whites",
+    "category": "Egg"
+  },
+  {
+    "displayName": "Fish Roe",
+    "normalizedName": "fish roe",
+    "aliases": "caviar|roe|tobiko|ikura|masago|lumpfish roe|salmon roe|sturgeon roe|flying fish roe",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fish eggs",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Eel",
+    "normalizedName": "eel",
+    "aliases": "unagi|freshwater eel|smoked eel|eel extract",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fish",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Oyster Sauce",
+    "normalizedName": "oyster sauce",
+    "aliases": "oyster extract|oyster flavour|oyster flavor",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Sauce made from oyster extracts",
+    "category": "Seafood"
+  },
+  {
+    "displayName": "Goose",
+    "normalizedName": "goose",
+    "aliases": "goose meat|goose fat|goose liver|foie gras|duck foie gras|goose breast|goose broth|schmaltz|rendered poultry fat|chicken fat|chicken schmaltz",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat or fat from poultry",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Bison",
+    "normalizedName": "bison",
+    "aliases": "buffalo|american buffalo|bison meat|buffalo meat|water buffalo",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Meat from bison or buffalo",
+    "category": "Meat"
+  },
+  {
+    "displayName": "Dripping",
+    "normalizedName": "dripping",
+    "aliases": "beef dripping|pork dripping|meat dripping|cooking fat",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fat that drips from roasting meat, collected and solidified",
+    "category": "Fat"
+  },
+  {
+    "displayName": "Fish Gelatin",
+    "normalizedName": "fish gelatin",
+    "aliases": "fish gelatine|marine gelatin|marine gelatine|fish collagen|fish skin gelatin|tilapia gelatin|cod gelatin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Gelatin made from fish skin and bones",
+    "category": "Gelling Agent"
+  },
+  {
+    "displayName": "Disodium Guanylate",
+    "normalizedName": "disodium guanylate",
+    "aliases": "e627|sodium guanylate|gmp|guanosine monophosphate",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Flavor enhancer typically derived from dried fish (sardines) or meat",
+    "category": "Flavor Enhancer"
+  },
+  {
+    "displayName": "Disodium Inosinate",
+    "normalizedName": "disodium inosinate",
+    "aliases": "e631|sodium inosinate|imp|inosine monophosphate",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Flavor enhancer typically derived from meat or fish",
+    "category": "Flavor Enhancer"
+  },
+  {
+    "displayName": "Disodium Ribonucleotides",
+    "normalizedName": "disodium ribonucleotides",
+    "aliases": "e635|sodium ribonucleotides|i and g|flavour enhancer 635|flavor enhancer 635",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Combination of E627 and E631; typically from fish or meat",
+    "category": "Flavor Enhancer"
+  },
+  {
+    "displayName": "Ammonium Phosphatides",
+    "normalizedName": "ammonium phosphatides",
+    "aliases": "e442|rapeseed ammonium phosphatide",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Emulsifier used in chocolate; may be derived from rapeseed (vegan) or animal fat",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Lactic Acid Esters of Monoglycerides",
+    "normalizedName": "lactic acid esters of monoglycerides",
+    "aliases": "e472b|lactoglycerides|lactem",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Emulsifier from lactic acid and monoglycerides; monoglycerides may be animal-derived",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Sorbitan Monostearate",
+    "normalizedName": "sorbitan monostearate",
+    "aliases": "e491|span 60|sorbitan stearate",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Emulsifier from sorbitol and stearic acid; stearic acid may be animal-derived",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Sorbitan Tristearate",
+    "normalizedName": "sorbitan tristearate",
+    "aliases": "e492|span 65",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Emulsifier from sorbitol and stearic acid; stearic acid may be animal-derived",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Sorbitan Monolaurate",
+    "normalizedName": "sorbitan monolaurate",
+    "aliases": "e493|span 20",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Emulsifier from sorbitol and lauric acid; may be animal-derived",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Sorbitan Monooleate",
+    "normalizedName": "sorbitan monooleate",
+    "aliases": "e494|span 80",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Emulsifier from sorbitol and oleic acid; oleic acid may be animal-derived",
+    "category": "Emulsifier"
+  },
+  {
+    "displayName": "Keratin",
+    "normalizedName": "keratin",
+    "aliases": "hydrolyzed keratin|keratin protein|animal keratin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Structural protein from animal hair, hooves, feathers, or horns",
+    "category": "Protein"
+  },
+  {
+    "displayName": "Chitosan",
+    "normalizedName": "chitosan",
+    "aliases": "chitin|crustacean chitin|shrimp chitin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Polysaccharide derived from the shells of crustaceans (shrimp, crab, lobster)",
+    "category": "Thickener"
+  },
+  {
+    "displayName": "Trypsin",
+    "normalizedName": "trypsin",
+    "aliases": "pancreatin|animal protease|porcine trypsin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Digestive enzyme extracted from pig or bovine pancreas",
+    "category": "Enzyme"
   }
 ]
