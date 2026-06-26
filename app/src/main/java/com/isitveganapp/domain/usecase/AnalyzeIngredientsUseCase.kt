@@ -24,6 +24,7 @@ class AnalyzeIngredientsUseCase @Inject constructor(
         }.distinctBy { it.ingredient.normalizedName }
 
         val overallStatus = when {
+            candidateNames.isEmpty() -> VeganStatus.UNCERTAIN
             findings.any { it.veganStatus == VeganStatus.NOT_VEGAN } -> VeganStatus.NOT_VEGAN
             findings.any { it.veganStatus == VeganStatus.UNCERTAIN } -> VeganStatus.UNCERTAIN
             else -> VeganStatus.VEGAN
