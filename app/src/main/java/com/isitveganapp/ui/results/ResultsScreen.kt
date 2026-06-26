@@ -19,8 +19,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.ThumbDown
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -58,7 +61,8 @@ import com.isitveganapp.ui.theme.RedContainer
 @Composable
 fun ResultsScreen(
     result: AnalysisResult,
-    onScanAgain: () -> Unit
+    onScanAgain: () -> Unit,
+    onFeedback: (isCorrect: Boolean) -> Unit = {}
 ) {
     val (bannerColor, bannerText, bannerIcon) = when (result.overallStatus) {
         VeganStatus.VEGAN -> Triple(Green40, "Vegan", Icons.Default.CheckCircle)
@@ -67,6 +71,7 @@ fun ResultsScreen(
     }
 
     var showRawText by remember { mutableStateOf(false) }
+    var feedbackGiven by remember { mutableStateOf<Boolean?>(null) }
 
     Scaffold(
         topBar = {
@@ -109,6 +114,55 @@ fun ResultsScreen(
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
+                        )
+                    }
+                }
+            }
+
+            // Feedback row — only when there are actual scanned tokens to give feedback on
+            if (result.parsedTokens.isNotEmpty()) item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (feedbackGiven == null) {
+                        Text(
+                            text = "Was this result correct?",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                            IconButton(onClick = {
+                                feedbackGiven = true
+                                onFeedback(true)
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.ThumbUp,
+                                    contentDescription = "Correct",
+                                    tint = Green40,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
+                            IconButton(onClick = {
+                                feedbackGiven = false
+                                onFeedback(false)
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.ThumbDown,
+                                    contentDescription = "Incorrect",
+                                    tint = Red40,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "Thanks for your feedback!",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Gray
                         )
                     }
                 }
