@@ -178,7 +178,7 @@
   {
     "displayName": "Milk",
     "normalizedName": "milk",
-    "aliases": "whole milk|skim milk|skimmed milk|full fat milk|dried milk|milk solids|milk powder|nonfat milk|semi skimmed milk",
+    "aliases": "whole milk|skim milk|skimmed milk|full fat milk|dried milk|milk solids|milk powder|nonfat milk|semi skimmed milk|cow milk|cows milk|cow's milk",
     "veganStatus": "NOT_VEGAN",
     "reason": "Dairy product from cows",
     "category": "Dairy"

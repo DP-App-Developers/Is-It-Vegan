@@ -27,6 +27,7 @@ class AnalyzeIngredientsUseCase @Inject constructor(
             candidateNames.isEmpty() -> VeganStatus.UNCERTAIN
             findings.any { it.veganStatus == VeganStatus.NOT_VEGAN } -> VeganStatus.NOT_VEGAN
             findings.any { it.veganStatus == VeganStatus.UNCERTAIN } -> VeganStatus.UNCERTAIN
+            findings.isEmpty() -> VeganStatus.UNCERTAIN
             else -> VeganStatus.VEGAN
         }
 
