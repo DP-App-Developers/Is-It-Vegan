@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import java.util.Locale
 import com.isitveganapp.data.model.VeganStatus
 import com.isitveganapp.domain.model.AnalysisResult
 import com.isitveganapp.domain.model.IngredientFinding
@@ -300,12 +301,22 @@ private fun IngredientFindingCard(finding: IngredientFinding, modifier: Modifier
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            val scannedLabel = finding.rawText
+                .split(" ")
+                .joinToString(" ") { it.replaceFirstChar { c -> c.titlecase(Locale.getDefault()) } }
             Text(
-                text = finding.ingredient.displayName,
+                text = scannedLabel,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = accentColor
             )
+            if (!finding.rawText.equals(finding.ingredient.normalizedName, ignoreCase = true)) {
+                Text(
+                    text = "a.k.a. ${finding.ingredient.displayName}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color.Gray
+                )
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = finding.ingredient.reason,
@@ -331,7 +342,12 @@ private fun IngredientChip(finding: IngredientFinding) {
     FilterChip(
         selected = finding.veganStatus != VeganStatus.VEGAN,
         onClick = {},
-        label = { Text(finding.ingredient.displayName) },
+        label = {
+            Text(
+                finding.rawText.split(" ")
+                    .joinToString(" ") { it.replaceFirstChar { c -> c.titlecase(Locale.getDefault()) } }
+            )
+        },
         colors = FilterChipDefaults.filterChipColors(
             selectedContainerColor = chipColor.copy(alpha = 0.15f),
             selectedLabelColor = chipColor
