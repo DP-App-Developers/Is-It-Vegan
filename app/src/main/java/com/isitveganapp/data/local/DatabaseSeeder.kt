@@ -42,14 +42,13 @@ data class IngredientJsonModel(
     val aliases: String,
     val veganStatus: String,
     val reason: String,
-    val category: String
+    val category: String = ""
 ) {
     fun toEntity() = Ingredient(
         displayName = displayName,
         normalizedName = normalizedName,
         aliases = aliases,
         veganStatus = VeganStatus.valueOf(veganStatus),
-        reason = reason,
-        category = category
+        reason = reason
     )
 }

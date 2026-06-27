@@ -18,6 +18,5 @@ data class Ingredient(
     @ColumnInfo(name = "normalized_name") val normalizedName: String,
     @ColumnInfo(name = "aliases") val aliases: String,
     @ColumnInfo(name = "vegan_status") val veganStatus: VeganStatus,
-    @ColumnInfo(name = "reason") val reason: String,
-    @ColumnInfo(name = "category") val category: String
+    @ColumnInfo(name = "reason") val reason: String
 ) : Parcelable

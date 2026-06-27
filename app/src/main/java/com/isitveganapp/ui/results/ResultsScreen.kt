@@ -322,12 +322,6 @@ private fun IngredientFindingCard(finding: IngredientFinding, modifier: Modifier
                 text = finding.ingredient.reason,
                 style = MaterialTheme.typography.bodyMedium
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = finding.ingredient.category,
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.Gray
-            )
         }
     }
 }
