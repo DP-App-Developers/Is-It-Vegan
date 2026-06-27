@@ -2,14 +2,29 @@ package com.isitveganapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Green80 = Color(0xFFA5D6A7)
-val Green40 = Color(0xFF4CAF50)
-val GreenContainer = Color(0xFFE8F5E9)
+// Brand greens
+val Brand50  = Color(0xFFF0FBF3)
+val Brand100 = Color(0xFFD8F3DC)
+val Brand500 = Color(0xFF52B788)
+val Brand700 = Color(0xFF2D6A4F)
+val Brand900 = Color(0xFF1B4332)
 
-val Red80 = Color(0xFFEF9A9A)
-val Red40 = Color(0xFFF44336)
-val RedContainer = Color(0xFFFFEBEE)
+// Semantic — vegan
+val VeganGreen        = Color(0xFF1A7A3C)
+val VeganGreenSurface = Color(0xFFE6F4EC)
 
-val Amber80 = Color(0xFFFFCC80)
-val Amber40 = Color(0xFFFF9800)
-val AmberContainer = Color(0xFFFFF3E0)
+// Semantic — not vegan
+val DangerRed         = Color(0xFFC0392B)
+val DangerRedSurface  = Color(0xFFFDECEB)
+
+// Semantic — uncertain
+val WarnAmber         = Color(0xFFD97706)
+val WarnAmberSurface  = Color(0xFFFFF8E6)
+
+// Neutrals
+val Gray900 = Color(0xFF111827)
+val Gray700 = Color(0xFF374151)
+val Gray500 = Color(0xFF6B7280)
+val Gray300 = Color(0xFFD1D5DB)
+val Gray100 = Color(0xFFF3F4F6)
+val Gray50  = Color(0xFFF9FAFB)

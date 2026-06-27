@@ -1,20 +1,26 @@
 package com.isitveganapp.ui.results
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -23,18 +29,13 @@ import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,309 +43,427 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import java.util.Locale
 import com.isitveganapp.data.model.VeganStatus
 import com.isitveganapp.domain.model.AnalysisResult
 import com.isitveganapp.domain.model.IngredientFinding
-import com.isitveganapp.ui.theme.AmberContainer
-import com.isitveganapp.ui.theme.Amber40
-import com.isitveganapp.ui.theme.GreenContainer
-import com.isitveganapp.ui.theme.Green40
-import com.isitveganapp.ui.theme.Red40
-import com.isitveganapp.ui.theme.RedContainer
+import com.isitveganapp.ui.theme.Brand700
+import com.isitveganapp.ui.theme.DangerRed
+import com.isitveganapp.ui.theme.DangerRedSurface
+import com.isitveganapp.ui.theme.Gray100
+import com.isitveganapp.ui.theme.Gray300
+import com.isitveganapp.ui.theme.Gray500
+import com.isitveganapp.ui.theme.Gray700
+import com.isitveganapp.ui.theme.VeganGreen
+import com.isitveganapp.ui.theme.VeganGreenSurface
+import com.isitveganapp.ui.theme.WarnAmber
+import com.isitveganapp.ui.theme.WarnAmberSurface
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ResultsScreen(
     result: AnalysisResult,
     onScanAgain: () -> Unit,
     onFeedback: (isCorrect: Boolean) -> Unit = {}
 ) {
-    val (bannerColor, bannerText, bannerIcon) = when (result.overallStatus) {
-        VeganStatus.VEGAN -> Triple(Green40, "Vegan", Icons.Default.CheckCircle)
-        VeganStatus.NOT_VEGAN -> Triple(Red40, "Not Vegan", Icons.Default.Error)
-        VeganStatus.UNCERTAIN -> Triple(Amber40, "Uncertain — Check Ingredients", Icons.Default.Warning)
+    val (heroTop, heroBottom, heroIcon, heroLabel, heroSub) = when (result.overallStatus) {
+        VeganStatus.VEGAN -> ResultsHero(
+            top    = Color(0xFF1A7A3C),
+            bottom = Color(0xFF2DA055),
+            icon   = Icons.Default.CheckCircle,
+            label  = "Vegan",
+            sub    = "No animal-derived ingredients detected"
+        )
+        VeganStatus.NOT_VEGAN -> ResultsHero(
+            top    = Color(0xFFA93226),
+            bottom = Color(0xFFC0392B),
+            icon   = Icons.Default.Error,
+            label  = "Not Vegan",
+            sub    = "Contains animal-derived ingredients"
+        )
+        VeganStatus.UNCERTAIN -> ResultsHero(
+            top    = Color(0xFFB7770D),
+            bottom = Color(0xFFD97706),
+            icon   = Icons.Default.Warning,
+            label  = "Uncertain",
+            sub    = "Some ingredients need manual verification"
+        )
     }
 
     var showRawText by remember { mutableStateOf(false) }
     var feedbackGiven by remember { mutableStateOf<Boolean?>(null) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Results") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = bannerColor,
-                    titleContentColor = Color.White
-                )
-            )
-        }
-    ) { padding ->
+    Scaffold(containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(bottom = innerPadding.calculateBottomPadding()),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-            // Verdict banner
+
+            // ── Hero ──────────────────────────────────────────────────────────
             item {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(bannerColor)
-                        .padding(vertical = 24.dp),
-                    contentAlignment = Alignment.Center
+                        .background(Brush.verticalGradient(listOf(heroTop, heroBottom)))
                 ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .statusBarsPadding()
+                            .padding(top = 36.dp, bottom = 52.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(88.dp)
+                                .clip(CircleShape)
+                                .background(Color.White.copy(alpha = 0.18f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = heroIcon,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(48.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(
+                            text = heroLabel,
+                            style = MaterialTheme.typography.headlineLarge,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = heroSub,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.White.copy(alpha = 0.85f)
+                        )
+                    }
+                }
+            }
+
+            // ── Flagged ingredients ───────────────────────────────────────────
+            if (result.flaggedIngredients.isNotEmpty()) {
+                item { SectionHeader("Issues Found") }
+                items(result.flaggedIngredients) { finding ->
+                    IngredientFindingCard(
+                        finding = finding,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 8.dp)
+                    )
+                }
+            }
+
+            // ── Clean result message ──────────────────────────────────────────
+            if (result.flaggedIngredients.isEmpty() && result.parsedTokens.isNotEmpty()) {
+                item {
                     Row(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(VeganGreenSurface)
+                            .padding(horizontal = 16.dp, vertical = 14.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Icon(
-                            imageVector = bannerIcon,
+                            imageVector = Icons.Default.CheckCircle,
                             contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(40.dp)
+                            tint = VeganGreen,
+                            modifier = Modifier.size(22.dp)
                         )
                         Text(
-                            text = bannerText,
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            text = "No non-vegan ingredients detected",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = VeganGreen,
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 }
             }
 
-            // Feedback row — only when there are actual scanned tokens to give feedback on
-            if (result.parsedTokens.isNotEmpty()) item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (feedbackGiven == null) {
-                        Text(
-                            text = "Was this result correct?",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Gray
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-                            IconButton(onClick = {
-                                feedbackGiven = true
-                                onFeedback(true)
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.ThumbUp,
-                                    contentDescription = "Correct",
-                                    tint = Green40,
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            }
-                            IconButton(onClick = {
-                                feedbackGiven = false
-                                onFeedback(false)
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.ThumbDown,
-                                    contentDescription = "Incorrect",
-                                    tint = Red40,
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            }
-                        }
-                    } else {
-                        Text(
-                            text = "Thanks for your feedback!",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Gray
-                        )
-                    }
-                }
-            }
-
-            // Flagged ingredients section
-            if (result.flaggedIngredients.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "Flagged Ingredients (${result.flaggedIngredients.size})",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                    )
-                }
-                items(result.flaggedIngredients) { finding ->
-                    IngredientFindingCard(
-                        finding = finding,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                }
-            }
-
-            // No flags message — show when OCR found tokens but none are non-vegan
-            if (result.flaggedIngredients.isEmpty() && result.parsedTokens.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "No non-vegan ingredients detected.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Green40,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-            }
-
-            // All scanned ingredients — DB-matched ones as colored chips, unmatched as plain chips
+            // ── Scanned ingredients ───────────────────────────────────────────
             if (result.parsedTokens.isNotEmpty()) {
                 val matchedNames = result.allIngredients.map { it.rawText }.toSet()
                 val unmatchedTokens = result.parsedTokens.filter { it !in matchedNames }
+
                 item {
-                    Text(
-                        text = "Scanned Ingredients (${result.parsedTokens.size})",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                    )
+                    SectionHeader("Scanned Ingredients (${result.parsedTokens.size})")
                     FlowRow(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         result.allIngredients.forEach { finding ->
-                            IngredientChip(finding)
+                            IngredientPill(finding)
                         }
                         unmatchedTokens.forEach { token ->
-                            FilterChip(
-                                selected = false,
-                                onClick = {},
-                                label = { Text(token) }
+                            PlainPill(token)
+                        }
+                    }
+                }
+            }
+
+            // ── OCR empty state ───────────────────────────────────────────────
+            if (result.parsedTokens.isEmpty()) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .padding(20.dp)
+                    ) {
+                        Text(
+                            text = "Couldn't read ingredients",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = if (result.rawText.isBlank())
+                                "No text was detected. Try again with better lighting or move the camera closer to the label."
+                            else
+                                "Text was detected but no ingredient list could be parsed. Point the camera directly at the ingredients section.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
+            // ── Feedback ──────────────────────────────────────────────────────
+            if (result.parsedTokens.isNotEmpty()) {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        if (feedbackGiven == null) {
+                            Text(
+                                text = "Was this result correct?",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Gray500
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            IconButton(
+                                onClick = { feedbackGiven = true; onFeedback(true) },
+                                modifier = Modifier.size(40.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ThumbUp,
+                                    contentDescription = "Correct",
+                                    tint = VeganGreen,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                            }
+                            IconButton(
+                                onClick = { feedbackGiven = false; onFeedback(false) },
+                                modifier = Modifier.size(40.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ThumbDown,
+                                    contentDescription = "Incorrect",
+                                    tint = DangerRed,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                            }
+                        } else {
+                            Text(
+                                text = "Thanks for your feedback!",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Gray500
                             )
                         }
                     }
                 }
             }
 
-            // OCR found nothing at all
-            if (result.parsedTokens.isEmpty()) {
-                item {
-                    Text(
-                        text = if (result.rawText.isBlank())
-                            "No text could be read. Try again with better lighting or move closer to the label."
-                        else
-                            "Text was read but no ingredient tokens could be parsed. Try pointing at the ingredients list specifically.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-            }
-
-            // Raw OCR text (collapsible)
+            // ── Raw OCR toggle ────────────────────────────────────────────────
             item {
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(
-                    onClick = { showRawText = !showRawText },
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                ) {
-                    Text(if (showRawText) "Hide Raw OCR Text" else "Show Raw OCR Text")
-                }
-                if (showRawText) {
-                    Text(
-                        text = result.rawText.ifBlank { "(no text recognized)" },
-                        style = MaterialTheme.typography.bodySmall,
-                        fontFamily = FontFamily.Monospace,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
-                            .padding(12.dp)
-                            .fillMaxWidth()
-                    )
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    TextButton(onClick = { showRawText = !showRawText }) {
+                        Text(
+                            text = if (showRawText) "Hide Raw OCR Text" else "Show Raw OCR Text",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Gray500
+                        )
+                    }
+                    if (showRawText) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = result.rawText.ifBlank { "(no text recognized)" },
+                            style = MaterialTheme.typography.bodySmall,
+                            fontFamily = FontFamily.Monospace,
+                            color = Gray700,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                .padding(16.dp)
+                        )
+                    }
                 }
             }
 
-            // Scan again
+            // ── Scan Again CTA ────────────────────────────────────────────────
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
                     onClick = onScanAgain,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(horizontal = 16.dp)
+                        .height(56.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Brand700)
                 ) {
-                    Text("Scan Another Product")
+                    Text(
+                        text = "Scan Another Product",
+                        style = MaterialTheme.typography.titleSmall
+                    )
                 }
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
             }
         }
     }
 }
 
+// ── Supporting composables ────────────────────────────────────────────────────
+
+private data class ResultsHero(
+    val top: Color,
+    val bottom: Color,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val label: String,
+    val sub: String
+)
+
+@Composable
+private fun SectionHeader(title: String) {
+    Text(
+        text = title.uppercase(Locale.getDefault()),
+        style = MaterialTheme.typography.labelMedium,
+        color = Gray500,
+        letterSpacing = 0.8.sp,
+        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 10.dp)
+    )
+}
+
 @Composable
 private fun IngredientFindingCard(finding: IngredientFinding, modifier: Modifier = Modifier) {
-    val containerColor = when (finding.veganStatus) {
-        VeganStatus.NOT_VEGAN -> RedContainer
-        VeganStatus.UNCERTAIN -> AmberContainer
-        VeganStatus.VEGAN -> GreenContainer
-    }
-    val accentColor = when (finding.veganStatus) {
-        VeganStatus.NOT_VEGAN -> Red40
-        VeganStatus.UNCERTAIN -> Amber40
-        VeganStatus.VEGAN -> Green40
+    val (accentColor, surfaceColor) = when (finding.veganStatus) {
+        VeganStatus.NOT_VEGAN -> DangerRed to DangerRedSurface
+        VeganStatus.UNCERTAIN -> WarnAmber to WarnAmberSurface
+        VeganStatus.VEGAN     -> VeganGreen to VeganGreenSurface
     }
 
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = containerColor),
-        shape = RoundedCornerShape(12.dp)
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(surfaceColor)
+            .height(IntrinsicSize.Min)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            val scannedLabel = finding.rawText
+        Box(
+            modifier = Modifier
+                .width(4.dp)
+                .fillMaxHeight()
+                .background(accentColor)
+        )
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
+            val label = finding.rawText
                 .split(" ")
                 .joinToString(" ") { it.replaceFirstChar { c -> c.titlecase(Locale.getDefault()) } }
             Text(
-                text = scannedLabel,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                text = label,
+                style = MaterialTheme.typography.titleSmall,
                 color = accentColor
             )
             if (!finding.rawText.equals(finding.ingredient.normalizedName, ignoreCase = true)) {
                 Text(
                     text = "a.k.a. ${finding.ingredient.displayName}",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.Gray
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Gray500
                 )
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = finding.ingredient.reason,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = Gray700
             )
         }
     }
 }
 
 @Composable
-private fun IngredientChip(finding: IngredientFinding) {
+private fun IngredientPill(finding: IngredientFinding) {
+    val isFlagged = finding.veganStatus != VeganStatus.VEGAN
     val chipColor = when (finding.veganStatus) {
-        VeganStatus.NOT_VEGAN -> Red40
-        VeganStatus.UNCERTAIN -> Amber40
-        VeganStatus.VEGAN -> Green40
+        VeganStatus.NOT_VEGAN -> DangerRed
+        VeganStatus.UNCERTAIN -> WarnAmber
+        VeganStatus.VEGAN     -> VeganGreen
     }
-    FilterChip(
-        selected = finding.veganStatus != VeganStatus.VEGAN,
-        onClick = {},
-        label = {
-            Text(
-                finding.rawText.split(" ")
-                    .joinToString(" ") { it.replaceFirstChar { c -> c.titlecase(Locale.getDefault()) } }
+    val label = finding.rawText
+        .split(" ")
+        .joinToString(" ") { it.replaceFirstChar { c -> c.titlecase(Locale.getDefault()) } }
+
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(100.dp))
+            .background(if (isFlagged) chipColor.copy(alpha = 0.1f) else Gray100)
+            .border(
+                width = 1.dp,
+                color = if (isFlagged) chipColor.copy(alpha = 0.45f) else Gray300,
+                shape = RoundedCornerShape(100.dp)
             )
-        },
-        colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = chipColor.copy(alpha = 0.15f),
-            selectedLabelColor = chipColor
+            .padding(horizontal = 14.dp, vertical = 7.dp)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            color = if (isFlagged) chipColor else Gray700,
+            fontWeight = if (isFlagged) FontWeight.Medium else FontWeight.Normal
         )
-    )
+    }
+}
+
+@Composable
+private fun PlainPill(token: String) {
+    val label = token
+        .split(" ")
+        .joinToString(" ") { it.replaceFirstChar { c -> c.titlecase(Locale.getDefault()) } }
+
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(100.dp))
+            .background(Gray100)
+            .border(1.dp, Gray300, RoundedCornerShape(100.dp))
+            .padding(horizontal = 14.dp, vertical = 7.dp)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            color = Gray700
+        )
+    }
 }
