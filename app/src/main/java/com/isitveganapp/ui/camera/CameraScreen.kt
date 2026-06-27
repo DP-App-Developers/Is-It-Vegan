@@ -182,6 +182,12 @@ fun CameraScreen(
                     .background(Color.Black.copy(alpha = 0.45f), RoundedCornerShape(100.dp))
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = "English labels only",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White.copy(alpha = 0.55f)
+            )
         }
 
         // Bottom gradient + shutter
