@@ -363,21 +363,11 @@ private fun IngredientFindingCard(finding: IngredientFinding, modifier: Modifier
                 .background(accentColor)
         )
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
-            val label = finding.rawText
-                .split(" ")
-                .joinToString(" ") { it.replaceFirstChar { c -> c.titlecase(Locale.getDefault()) } }
             Text(
-                text = label,
+                text = finding.ingredient.displayName,
                 style = MaterialTheme.typography.titleSmall,
                 color = accentColor
             )
-            if (!finding.rawText.equals(finding.ingredient.normalizedName, ignoreCase = true)) {
-                Text(
-                    text = "a.k.a. ${finding.ingredient.displayName}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Gray500
-                )
-            }
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = finding.ingredient.reason,
