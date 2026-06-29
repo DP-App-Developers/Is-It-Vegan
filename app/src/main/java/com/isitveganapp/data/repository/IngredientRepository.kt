@@ -25,9 +25,39 @@ class IngredientRepository @Inject constructor(
 
         if (prefixResults.size == 1) return prefixResults.first()
 
-        return prefixResults
+        prefixResults
             .minByOrNull { levenshtein(it.normalizedName, normalized) }
             ?.takeIf { levenshtein(it.normalizedName, normalized) <= 2 }
+            ?.let { return it }
+
+        // Sub-word fallback: for qualified names like "organic a2 milk" or "whole milk solids",
+        // try each individual word so the meaningful ingredient name is still matched.
+        // Guard: skip if the token contains a plant-base word — that signals the whole
+        // compound is plant-derived (e.g. "almond milk", "coconut cream") and matching
+        // "milk"/"cream" alone would be a false positive.
+        val rawWords = normalized.split(" ")
+        if (rawWords.any { it in PLANT_BASE_WORDS }) return null
+
+        val words = rawWords.filter { it.length >= 4 }
+        if (words.size > 1) {
+            for (word in words) {
+                dao.findByNormalizedName(word)?.let { return it }
+                dao.findByAlias(word)?.let { return it }
+            }
+        }
+
+        return null
+    }
+
+    companion object {
+        // Words that signal a compound ingredient is plant-derived.
+        // Presence of any of these blocks the sub-word fallback so "almond milk" never
+        // matches "milk", "coconut cream" never matches "cream", etc.
+        private val PLANT_BASE_WORDS = setOf(
+            "soy", "soya", "almond", "oat", "oats", "rice", "hemp",
+            "coconut", "cashew", "hazelnut", "macadamia", "walnut",
+            "pea", "potato", "chickpea", "lentil", "plant", "vegan"
+        )
     }
 
     fun normalize(raw: String): String =

@@ -20,16 +20,17 @@ class ParseIngredientTextUseCase @Inject constructor() {
             }
         }
 
-        // Trim at known section terminators
+        // Trim at the earliest section terminator found in the text.
+        // "contains" handles allergen-declaration lines like "CONTAINS: MILK." that appear
+        // after the ingredient list — it's safe to include because if "contains:" was the
+        // ingredient-section header, it was already consumed above and won't appear again.
         val terminators = listOf("nutrition", "per 100g", "per 100 g", "typical values",
-            "storage", "best before", "suitable for", "allergen", "may contain")
-        for (term in terminators) {
-            val idx = text.lowercase().indexOf(term)
-            if (idx != -1 && idx > 10) {
-                text = text.substring(0, idx)
-                break
-            }
-        }
+            "storage", "best before", "suitable for", "allergen", "may contain", "contains")
+        val textLower = text.lowercase()
+        val cutAt = terminators
+            .mapNotNull { term -> textLower.indexOf(term).takeIf { it > 10 } }
+            .minOrNull()
+        if (cutAt != null) text = text.substring(0, cutAt)
 
         val normalized = text.lowercase().replace(Regex("\\s+"), " ").trim()
 
