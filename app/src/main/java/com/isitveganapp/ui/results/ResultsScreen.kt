@@ -1,12 +1,9 @@
 package com.isitveganapp.ui.results
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -57,8 +54,6 @@ import com.isitveganapp.domain.model.IngredientFinding
 import com.isitveganapp.ui.theme.Brand700
 import com.isitveganapp.ui.theme.DangerRed
 import com.isitveganapp.ui.theme.DangerRedSurface
-import com.isitveganapp.ui.theme.Gray100
-import com.isitveganapp.ui.theme.Gray300
 import com.isitveganapp.ui.theme.Gray500
 import com.isitveganapp.ui.theme.Gray700
 import com.isitveganapp.ui.theme.VeganGreen
@@ -66,7 +61,6 @@ import com.isitveganapp.ui.theme.VeganGreenSurface
 import com.isitveganapp.ui.theme.WarnAmber
 import com.isitveganapp.ui.theme.WarnAmberSurface
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ResultsScreen(
     result: AnalysisResult,
@@ -190,30 +184,6 @@ fun ResultsScreen(
                             color = VeganGreen,
                             fontWeight = FontWeight.Medium
                         )
-                    }
-                }
-            }
-
-            // ── Scanned ingredients ───────────────────────────────────────────
-            if (result.parsedTokens.isNotEmpty()) {
-                val matchedNames = result.allIngredients.map { it.rawText }.toSet()
-                val unmatchedTokens = result.parsedTokens.filter { it !in matchedNames }
-
-                item {
-                    SectionHeader("Scanned Ingredients (${result.parsedTokens.size})")
-                    FlowRow(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(bottom = 4.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        result.allIngredients.forEach { finding ->
-                            IngredientPill(finding)
-                        }
-                        unmatchedTokens.forEach { token ->
-                            PlainPill(token)
-                        }
                     }
                 }
             }
@@ -412,58 +382,5 @@ private fun IngredientFindingCard(finding: IngredientFinding, modifier: Modifier
                 color = Gray700
             )
         }
-    }
-}
-
-@Composable
-private fun IngredientPill(finding: IngredientFinding) {
-    val isFlagged = finding.veganStatus != VeganStatus.VEGAN
-    val chipColor = when (finding.veganStatus) {
-        VeganStatus.NOT_VEGAN -> DangerRed
-        VeganStatus.UNCERTAIN -> WarnAmber
-        VeganStatus.VEGAN     -> VeganGreen
-    }
-    val label = finding.rawText
-        .split(" ")
-        .joinToString(" ") { it.replaceFirstChar { c -> c.titlecase(Locale.getDefault()) } }
-
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(100.dp))
-            .background(if (isFlagged) chipColor.copy(alpha = 0.1f) else Gray100)
-            .border(
-                width = 1.dp,
-                color = if (isFlagged) chipColor.copy(alpha = 0.45f) else Gray300,
-                shape = RoundedCornerShape(100.dp)
-            )
-            .padding(horizontal = 14.dp, vertical = 7.dp)
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = if (isFlagged) chipColor else Gray700,
-            fontWeight = if (isFlagged) FontWeight.Medium else FontWeight.Normal
-        )
-    }
-}
-
-@Composable
-private fun PlainPill(token: String) {
-    val label = token
-        .split(" ")
-        .joinToString(" ") { it.replaceFirstChar { c -> c.titlecase(Locale.getDefault()) } }
-
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(100.dp))
-            .background(Gray100)
-            .border(1.dp, Gray300, RoundedCornerShape(100.dp))
-            .padding(horizontal = 14.dp, vertical = 7.dp)
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = Gray700
-        )
     }
 }
