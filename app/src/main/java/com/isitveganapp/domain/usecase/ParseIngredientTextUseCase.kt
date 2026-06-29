@@ -9,44 +9,64 @@ class ParseIngredientTextUseCase @Inject constructor() {
     private val bracketRegex = Regex("\\(([^)]+)\\)")
 
     fun execute(rawOcrText: String): List<String> {
-        // Find the ingredients section — look for the last occurrence of the header
-        val ingredientsMarkers = listOf("ingredients:", "ingredients :", "contains:", "contains :")
-        var text = rawOcrText
-        for (marker in ingredientsMarkers) {
-            val idx = rawOcrText.lowercase().lastIndexOf(marker)
+        val lower = rawOcrText.lowercase()
+
+        // 1. Find the start of the primary ingredient/contains section.
+        val startMarkers = listOf("ingredients:", "ingredients :", "contains:", "contains :")
+        var mainText = rawOcrText
+        for (marker in startMarkers) {
+            val idx = lower.lastIndexOf(marker)
             if (idx != -1) {
-                text = rawOcrText.substring(idx + marker.length)
+                mainText = rawOcrText.substring(idx + marker.length)
                 break
             }
         }
 
-        // Trim at the earliest section terminator found in the text.
-        // "contains" handles allergen-declaration lines like "CONTAINS: MILK." that appear
-        // after the ingredient list — it's safe to include because if "contains:" was the
-        // ingredient-section header, it was already consumed above and won't appear again.
-        val terminators = listOf("nutrition", "per 100g", "per 100 g", "typical values",
-            "storage", "best before", "suitable for", "allergen", "may contain", "contains")
-        val textLower = text.lowercase()
-        val cutAt = terminators
-            .mapNotNull { term -> textLower.indexOf(term).takeIf { it > 10 } }
-            .minOrNull()
-        if (cutAt != null) text = text.substring(0, cutAt)
+        // 2. If a secondary "CONTAINS:" allergen block appears later in the extracted text,
+        //    split it into its own segment rather than trimming it away entirely.
+        //    This means "INGREDIENTS: sugar, water. CONTAINS: MILK" correctly yields
+        //    both the ingredient tokens AND "milk" from the allergen declaration.
+        var allergenText = ""
+        val mainLower = mainText.lowercase()
+        for (marker in listOf("contains:", "contains :")) {
+            val idx = mainLower.indexOf(marker)
+            if (idx > 10) {
+                allergenText = mainText.substring(idx + marker.length)
+                mainText = mainText.substring(0, idx)
+                break
+            }
+        }
 
-        val normalized = text.lowercase().replace(Regex("\\s+"), " ").trim()
+        // 3. Trim both segments at other known section terminators.
+        val terminators = listOf(
+            "nutrition", "per 100g", "per 100 g", "typical values",
+            "storage", "best before", "suitable for", "allergen", "may contain"
+        )
 
-        // Extract E-numbers separately before splitting (they appear inline)
+        mainText = trimAtTerminators(mainText, terminators)
+        allergenText = trimAtTerminators(allergenText, terminators)
+
+        // 4. Extract E-numbers from the full raw text (they appear anywhere inline).
         val eNumbers = eNumberRegex.findAll(rawOcrText).map { it.value.uppercase() }.toList()
 
-        // Expand bracket sub-ingredients then split
+        // 5. Tokenize both segments and combine.
+        return (tokenize(mainText) + tokenize(allergenText) + eNumbers).distinct()
+    }
+
+    private fun trimAtTerminators(text: String, terminators: List<String>): String {
+        val lower = text.lowercase()
+        val cut = terminators.mapNotNull { lower.indexOf(it).takeIf { it > 10 } }.minOrNull()
+        return if (cut != null) text.substring(0, cut) else text
+    }
+
+    private fun tokenize(text: String): List<String> {
+        val normalized = text.lowercase().replace(Regex("\\s+"), " ").trim()
         val expanded = normalized.replace(bracketRegex) { match ->
             val inner = match.groupValues[1]
             if (inner.contains(",")) ", $inner," else match.value
         }
-
-        val tokens = expanded.split(delimiterRegex)
+        return expanded.split(delimiterRegex)
             .map { it.trim().replace(Regex("[^a-z0-9 \\-]"), " ").replace(Regex("\\s+"), " ").trim() }
             .filter { it.length > 1 }
-
-        return (tokens + eNumbers).distinct()
     }
 }
