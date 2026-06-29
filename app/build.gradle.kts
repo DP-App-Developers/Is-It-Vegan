@@ -99,4 +99,8 @@ dependencies {
     implementation(libs.firebase.analytics)
 
     debugImplementation(libs.compose.ui.tooling)
+
+    testImplementation(libs.junit4)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
 }

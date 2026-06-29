@@ -21,6 +21,9 @@ room                   = "2.6.1"
 
 coroutines             = "1.9.0"
 
+junit4                 = "4.13.2"
+mockk                  = "1.13.13"
+
 accompanistPermissions = "0.37.2"
 
 kotlinxSerialization   = "1.7.3"
@@ -58,7 +61,11 @@ room-runtime   = { group = "androidx.room", name = "room-runtime", version.ref =
 room-ktx       = { group = "androidx.room", name = "room-ktx",     version.ref = "room" }
 room-compiler  = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-android      = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-test         = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test",   version.ref = "coroutines" }
+
+junit4 = { group = "junit",    name = "junit", version.ref = "junit4" }
+mockk  = { group = "io.mockk", name = "mockk", version.ref = "mockk"  }
 
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
 
