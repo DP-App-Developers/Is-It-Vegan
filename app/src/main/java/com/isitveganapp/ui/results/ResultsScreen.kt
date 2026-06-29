@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -267,33 +268,6 @@ fun ResultsScreen(
                 }
             }
 
-            // ── Raw OCR toggle ────────────────────────────────────────────────
-            item {
-                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    TextButton(onClick = { showRawText = !showRawText }) {
-                        Text(
-                            text = if (showRawText) "Hide Raw OCR Text" else "Show Raw OCR Text",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = Gray500
-                        )
-                    }
-                    if (showRawText) {
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = result.rawText.ifBlank { "(no text recognized)" },
-                            style = MaterialTheme.typography.bodySmall,
-                            fontFamily = FontFamily.Monospace,
-                            color = Gray700,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .padding(16.dp)
-                        )
-                    }
-                }
-            }
-
             // ── Scan Again CTA ────────────────────────────────────────────────
             item {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -310,6 +284,35 @@ fun ResultsScreen(
                         text = "Scan Another Product",
                         style = MaterialTheme.typography.titleSmall
                     )
+                }
+            }
+
+            // ── Raw OCR toggle ────────────────────────────────────────────────
+            item {
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    TextButton(onClick = { showRawText = !showRawText }) {
+                        Text(
+                            text = if (showRawText) "Hide Raw OCR Text" else "Show Raw OCR Text",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Gray500
+                        )
+                    }
+                    if (showRawText) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        SelectionContainer {
+                            Text(
+                                text = result.rawText.ifBlank { "(no text recognized)" },
+                                style = MaterialTheme.typography.bodySmall,
+                                fontFamily = FontFamily.Monospace,
+                                color = Gray700,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .padding(16.dp)
+                            )
+                        }
+                    }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
             }
