@@ -96,6 +96,10 @@ fun CameraScreen(
         LifecycleCameraController(context).apply {
             setEnabledUseCases(CameraController.IMAGE_CAPTURE)
             cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            // Wait for the phone's full processing pipeline (HDR, noise reduction, sharpening)
+            // before capturing. Thin strokes like "i" survive a processed frame; they don't
+            // survive a raw unprocessed one.
+            setImageCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
         }
     }
 
