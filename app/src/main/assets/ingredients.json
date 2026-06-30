@@ -422,7 +422,7 @@
   {
     "displayName": "Animal Fat",
     "normalizedName": "animal fat",
-    "aliases": "animal shortening|mixed fat|fat|rendered animal fat",
+    "aliases": "animal shortening|mixed fat|rendered animal fat",
     "veganStatus": "NOT_VEGAN",
     "reason": "Fat derived from animal sources"
   },

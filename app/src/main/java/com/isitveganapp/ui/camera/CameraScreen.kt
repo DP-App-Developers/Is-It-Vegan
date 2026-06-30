@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,17 +43,24 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -155,61 +164,77 @@ fun CameraScreen(
             )
         }
 
-        // Scanning frame (centered)
-        Column(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Canvas(
-                modifier = Modifier
-                    .fillMaxWidth(0.85f)
-                    .aspectRatio(2.8f)
-                    .onGloballyPositioned { coords ->
-                        val pos = coords.positionInRoot()
-                        val sz = coords.size
-                        scanBoxLeft = pos.x.toInt()
-                        scanBoxTop = pos.y.toInt()
-                        scanBoxRight = (pos.x + sz.width).toInt()
-                        scanBoxBottom = (pos.y + sz.height).toInt()
-                    }
-            ) {
-                val cLen = 28.dp.toPx()
-                val sw = 3.dp.toPx()
-                val col = Color.White
-                val cap = StrokeCap.Round
-                val w = size.width
-                val h = size.height
+        // Scrim + transparent scan window + corner brackets
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val density = LocalDensity.current
+            val screenW = constraints.maxWidth.toFloat()
+            val screenH = constraints.maxHeight.toFloat()
+            val boxW = screenW * 0.85f
+            val boxH = boxW / 2.8f * 1.5f
+            val boxLeft = (screenW - boxW) / 2f
+            val boxTop = (screenH - boxH) / 2f
 
-                drawLine(col, Offset(0f, cLen), Offset(0f, 0f), sw, cap)
-                drawLine(col, Offset(0f, 0f), Offset(cLen, 0f), sw, cap)
-
-                drawLine(col, Offset(w - cLen, 0f), Offset(w, 0f), sw, cap)
-                drawLine(col, Offset(w, 0f), Offset(w, cLen), sw, cap)
-
-                drawLine(col, Offset(0f, h - cLen), Offset(0f, h), sw, cap)
-                drawLine(col, Offset(0f, h), Offset(cLen, h), sw, cap)
-
-                drawLine(col, Offset(w - cLen, h), Offset(w, h), sw, cap)
-                drawLine(col, Offset(w, h - cLen), Offset(w, h), sw, cap)
+            SideEffect {
+                scanBoxLeft = boxLeft.toInt()
+                scanBoxTop = boxTop.toInt()
+                scanBoxRight = (boxLeft + boxW).toInt()
+                scanBoxBottom = (boxTop + boxH).toInt()
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val corner = 10.dp.toPx()
+                val cLen = 24.dp.toPx()
+                val sw = 2.5.dp.toPx()
 
-            Text(
-                text = "FIT ALL INGREDIENTS IN THE BOX",
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.White.copy(alpha = 0.92f),
-                letterSpacing = 1.5.sp,
+                // Scrim with EvenOdd hole: fill the screen minus the scan window
+                val scrimPath = Path().apply {
+                    addRect(Rect(0f, 0f, size.width, size.height))
+                    addRoundRect(
+                        RoundRect(boxLeft, boxTop, boxLeft + boxW, boxTop + boxH, CornerRadius(corner))
+                    )
+                    fillType = PathFillType.EvenOdd
+                }
+                drawPath(scrimPath, Color.Black.copy(alpha = 0.55f))
+
+                // Subtle border tracing the window edge
+                drawRoundRect(
+                    color = Color.White.copy(alpha = 0.25f),
+                    topLeft = Offset(boxLeft, boxTop),
+                    size = Size(boxW, boxH),
+                    cornerRadius = CornerRadius(corner),
+                    style = Stroke(width = 1.dp.toPx())
+                )
+
+                // Corner brackets
+                val x0 = boxLeft;  val y0 = boxTop
+                val x1 = boxLeft + boxW; val y1 = boxTop + boxH
+
+                drawLine(Color.White, Offset(x0, y0 + cLen), Offset(x0, y0), sw, StrokeCap.Round)
+                drawLine(Color.White, Offset(x0, y0), Offset(x0 + cLen, y0), sw, StrokeCap.Round)
+
+                drawLine(Color.White, Offset(x1 - cLen, y0), Offset(x1, y0), sw, StrokeCap.Round)
+                drawLine(Color.White, Offset(x1, y0), Offset(x1, y0 + cLen), sw, StrokeCap.Round)
+
+                drawLine(Color.White, Offset(x0, y1 - cLen), Offset(x0, y1), sw, StrokeCap.Round)
+                drawLine(Color.White, Offset(x0, y1), Offset(x0 + cLen, y1), sw, StrokeCap.Round)
+
+                drawLine(Color.White, Offset(x1 - cLen, y1), Offset(x1, y1), sw, StrokeCap.Round)
+                drawLine(Color.White, Offset(x1, y1 - cLen), Offset(x1, y1), sw, StrokeCap.Round)
+            }
+
+            // Instruction label sits just below the scan window
+            Box(
                 modifier = Modifier
-                    .background(Color.Black.copy(alpha = 0.45f), RoundedCornerShape(100.dp))
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = "English labels only",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.White.copy(alpha = 0.55f)
-            )
+                    .align(Alignment.Center)
+                    .offset(y = with(density) { boxH.toDp() } / 2 + 20.dp)
+            ) {
+                Text(
+                    text = "Fit all ingredients inside the box",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White.copy(alpha = 0.8f),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
 
         // Bottom gradient + shutter
