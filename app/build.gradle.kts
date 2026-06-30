@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.coroutines.android)
 
     implementation(libs.accompanist.permissions)
+    implementation(libs.splashscreen)
 
     implementation(libs.kotlinx.serialization.json)
 

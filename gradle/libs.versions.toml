@@ -25,6 +25,7 @@ junit4                 = "4.13.2"
 mockk                  = "1.13.13"
 
 accompanistPermissions = "0.37.2"
+splashscreen           = "1.0.1"
 
 kotlinxSerialization   = "1.7.3"
 
@@ -68,6 +69,7 @@ junit4 = { group = "junit",    name = "junit", version.ref = "junit4" }
 mockk  = { group = "io.mockk", name = "mockk", version.ref = "mockk"  }
 
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
+splashscreen            = { group = "androidx.core",            name = "core-splashscreen",       version.ref = "splashscreen"           }
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
