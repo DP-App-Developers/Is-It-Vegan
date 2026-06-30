@@ -39,7 +39,7 @@ class IngredientRepository @Inject constructor(
         if (rawWords.any { it in PLANT_BASE_WORDS }) return null
 
         val words = rawWords.filter { it.length >= 4 }
-        if (words.size > 1) {
+        if (rawWords.size > 1) {
             for (word in words) {
                 dao.findByNormalizedName(word)?.let { return it }
                 dao.findByAlias(word)?.let { return it }
