@@ -54,7 +54,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
+import java.util.concurrent.Executors
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -107,6 +107,9 @@ fun CameraScreen(
         cameraController.bindToLifecycle(lifecycleOwner)
         onDispose { cameraController.unbind() }
     }
+
+    val captureExecutor = remember { Executors.newSingleThreadExecutor() }
+    DisposableEffect(Unit) { onDispose { captureExecutor.shutdown() } }
 
     val isProcessing = uiState is CameraViewModel.UiState.Processing
 
@@ -241,8 +244,9 @@ fun CameraScreen(
                                 .clip(CircleShape)
                                 .background(Color.White)
                                 .clickable {
+                                    viewModel.onShutterPressed()
                                     cameraController.takePicture(
-                                        ContextCompat.getMainExecutor(context),
+                                        captureExecutor,
                                         object : ImageCapture.OnImageCapturedCallback() {
                                             override fun onCaptureSuccess(proxy: ImageProxy) {
                                                 val bitmap = proxy.toBitmap()
@@ -250,7 +254,9 @@ fun CameraScreen(
                                                 proxy.close()
                                                 viewModel.processCapture(bitmap, rotation, onResultReady)
                                             }
-                                            override fun onError(e: ImageCaptureException) {}
+                                            override fun onError(e: ImageCaptureException) {
+                                                viewModel.clearError()
+                                            }
                                         }
                                     )
                                 }

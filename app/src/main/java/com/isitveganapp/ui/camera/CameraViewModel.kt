@@ -37,6 +37,10 @@ class CameraViewModel @Inject constructor(
         }
     }
 
+    fun onShutterPressed() {
+        _uiState.value = UiState.Processing
+    }
+
     fun processCapture(bitmap: Bitmap, rotationDegrees: Int = 0, onResult: (AnalysisResult) -> Unit) {
         viewModelScope.launch {
             _uiState.value = UiState.Processing

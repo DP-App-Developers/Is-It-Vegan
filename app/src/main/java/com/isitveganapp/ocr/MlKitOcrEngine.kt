@@ -11,8 +11,10 @@ import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 class MlKitOcrEngine @Inject constructor() {
@@ -20,25 +22,25 @@ class MlKitOcrEngine @Inject constructor() {
     private val recognizer: TextRecognizer =
         TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
-    suspend fun recognizeText(bitmap: Bitmap, rotationDegrees: Int = 0): Result<String> {
-        if (isBlurry(bitmap)) {
-            return Result.failure(Exception("Image too blurry — move closer to the label and hold steady"))
-        }
-        return suspendCoroutine { cont ->
+    suspend fun recognizeText(bitmap: Bitmap, rotationDegrees: Int = 0): Result<String> =
+        withContext(Dispatchers.Default) {
+            if (isBlurry(bitmap)) {
+                return@withContext Result.failure(Exception("Image too blurry — move closer to the label and hold steady"))
+            }
             val prepared = preprocessBitmap(bitmap)
-            val image = InputImage.fromBitmap(prepared, rotationDegrees)
-            recognizer.process(image)
-                .addOnSuccessListener { visionText ->
-                    if (prepared !== bitmap) prepared.recycle()
-                    val cleaned = visionText.text.let(::fixOcrConfusions)
-                    cont.resume(Result.success(cleaned))
-                }
-                .addOnFailureListener { e ->
-                    if (prepared !== bitmap) prepared.recycle()
-                    cont.resume(Result.failure(e))
-                }
+            suspendCancellableCoroutine { cont ->
+                val image = InputImage.fromBitmap(prepared, rotationDegrees)
+                recognizer.process(image)
+                    .addOnSuccessListener { visionText ->
+                        if (prepared !== bitmap) prepared.recycle()
+                        cont.resume(Result.success(visionText.text.let(::fixOcrConfusions)))
+                    }
+                    .addOnFailureListener { e ->
+                        if (prepared !== bitmap) prepared.recycle()
+                        cont.resume(Result.failure(e))
+                    }
+            }
         }
-    }
 
     fun close() = recognizer.close()
 
