@@ -39,7 +39,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -111,6 +115,11 @@ fun CameraScreen(
 
     val isProcessing = uiState is CameraViewModel.UiState.Processing
 
+    var scanBoxLeft by remember { mutableStateOf(0) }
+    var scanBoxTop by remember { mutableStateOf(0) }
+    var scanBoxRight by remember { mutableStateOf(0) }
+    var scanBoxBottom by remember { mutableStateOf(0) }
+
     Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
 
         // Camera preview
@@ -155,6 +164,14 @@ fun CameraScreen(
                 modifier = Modifier
                     .fillMaxWidth(0.85f)
                     .aspectRatio(2.8f)
+                    .onGloballyPositioned { coords ->
+                        val pos = coords.positionInRoot()
+                        val sz = coords.size
+                        scanBoxLeft = pos.x.toInt()
+                        scanBoxTop = pos.y.toInt()
+                        scanBoxRight = (pos.x + sz.width).toInt()
+                        scanBoxBottom = (pos.y + sz.height).toInt()
+                    }
             ) {
                 val cLen = 28.dp.toPx()
                 val sw = 3.dp.toPx()
@@ -179,7 +196,7 @@ fun CameraScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "POINT AT INGREDIENTS LIST",
+                text = "FIT ALL INGREDIENTS IN THE BOX",
                 style = MaterialTheme.typography.labelSmall,
                 color = Color.White.copy(alpha = 0.92f),
                 letterSpacing = 1.5.sp,
@@ -250,7 +267,13 @@ fun CameraScreen(
                                                 val bitmap = proxy.toBitmap()
                                                 val rotation = proxy.imageInfo.rotationDegrees
                                                 proxy.close()
-                                                viewModel.processCapture(bitmap, rotation, onResultReady)
+                                                val dm = context.resources.displayMetrics
+                                                viewModel.processCapture(
+                                                    bitmap, rotation,
+                                                    dm.widthPixels, dm.heightPixels,
+                                                    scanBoxLeft, scanBoxTop, scanBoxRight, scanBoxBottom,
+                                                    onResultReady
+                                                )
                                             }
                                             override fun onError(e: ImageCaptureException) {
                                                 viewModel.clearError()

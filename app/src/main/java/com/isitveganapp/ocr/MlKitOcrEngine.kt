@@ -3,6 +3,7 @@ package com.isitveganapp.ocr
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.ColorMatrix
+import android.graphics.Matrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import com.google.mlkit.vision.common.InputImage
@@ -22,27 +23,88 @@ class MlKitOcrEngine @Inject constructor() {
     private val recognizer: TextRecognizer =
         TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
-    suspend fun recognizeText(bitmap: Bitmap, rotationDegrees: Int = 0): Result<String> =
-        withContext(Dispatchers.Default) {
-            if (isBlurry(bitmap)) {
+    suspend fun recognizeText(
+        bitmap: Bitmap,
+        rotationDegrees: Int = 0,
+        screenWidthPx: Int = 0,
+        screenHeightPx: Int = 0,
+        scanBoxLeft: Int = 0,
+        scanBoxTop: Int = 0,
+        scanBoxRight: Int = 0,
+        scanBoxBottom: Int = 0
+    ): Result<String> = withContext(Dispatchers.Default) {
+            val hasScanBox = screenWidthPx > 0 && scanBoxRight > scanBoxLeft && scanBoxBottom > scanBoxTop
+            val target = if (hasScanBox) {
+                cropToScanBox(bitmap, rotationDegrees, screenWidthPx, screenHeightPx, scanBoxLeft, scanBoxTop, scanBoxRight, scanBoxBottom)
+            } else {
+                bitmap
+            }
+            val targetRotation = if (hasScanBox) 0 else rotationDegrees
+
+            if (isBlurry(target)) {
+                if (target !== bitmap) target.recycle()
                 return@withContext Result.failure(Exception("Image too blurry — move closer to the label and hold steady"))
             }
-            val prepared = preprocessBitmap(bitmap)
+            val prepared = preprocessBitmap(target)
             suspendCancellableCoroutine { cont ->
-                val image = InputImage.fromBitmap(prepared, rotationDegrees)
+                val image = InputImage.fromBitmap(prepared, targetRotation)
                 recognizer.process(image)
                     .addOnSuccessListener { visionText ->
-                        if (prepared !== bitmap) prepared.recycle()
+                        if (prepared !== target) prepared.recycle()
+                        if (target !== bitmap) target.recycle()
                         cont.resume(Result.success(visionText.text.let(::fixOcrConfusions)))
                     }
                     .addOnFailureListener { e ->
-                        if (prepared !== bitmap) prepared.recycle()
+                        if (prepared !== target) prepared.recycle()
+                        if (target !== bitmap) target.recycle()
                         cont.resume(Result.failure(e))
                     }
             }
         }
 
     fun close() = recognizer.close()
+
+    // Rotate the bitmap to match screen orientation, then crop to the scan box region
+    // using FILL_CENTER coordinate mapping (the PreviewView scale type).
+    private fun cropToScanBox(
+        bitmap: Bitmap,
+        rotationDegrees: Int,
+        screenWidthPx: Int,
+        screenHeightPx: Int,
+        boxLeft: Int,
+        boxTop: Int,
+        boxRight: Int,
+        boxBottom: Int
+    ): Bitmap {
+        val rotated = if (rotationDegrees != 0) {
+            val matrix = Matrix()
+            matrix.postRotate(rotationDegrees.toFloat())
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        } else {
+            bitmap
+        }
+
+        // FILL_CENTER: image is scaled uniformly to fill the entire view, centered.
+        // scale = max(screenW / imgW, screenH / imgH)
+        val scale = maxOf(screenWidthPx.toFloat() / rotated.width, screenHeightPx.toFloat() / rotated.height)
+
+        // Pixels of the scaled image that extend beyond the screen on each axis (half on each side).
+        val offsetX = (rotated.width * scale - screenWidthPx) / 2f
+        val offsetY = (rotated.height * scale - screenHeightPx) / 2f
+
+        // Map scan box screen coordinates to bitmap coordinates.
+        val left = ((boxLeft + offsetX) / scale).toInt().coerceAtLeast(0)
+        val top = ((boxTop + offsetY) / scale).toInt().coerceAtLeast(0)
+        val right = ((boxRight + offsetX) / scale).toInt().coerceAtMost(rotated.width)
+        val bottom = ((boxBottom + offsetY) / scale).toInt().coerceAtMost(rotated.height)
+
+        val w = (right - left).coerceAtLeast(1)
+        val h = (bottom - top).coerceAtLeast(1)
+
+        val cropped = Bitmap.createBitmap(rotated, left, top, w, h)
+        if (rotated !== bitmap) rotated.recycle()
+        return cropped
+    }
 
     // Laplacian variance: apply a 4-neighbour Laplacian kernel to a small grayscale
     // thumbnail and compute the variance of the response. Sharp images have strong edges

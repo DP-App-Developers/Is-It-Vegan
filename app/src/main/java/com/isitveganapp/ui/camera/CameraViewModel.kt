@@ -41,10 +41,24 @@ class CameraViewModel @Inject constructor(
         _uiState.value = UiState.Processing
     }
 
-    fun processCapture(bitmap: Bitmap, rotationDegrees: Int = 0, onResult: (AnalysisResult) -> Unit) {
+    fun processCapture(
+        bitmap: Bitmap,
+        rotationDegrees: Int = 0,
+        screenWidthPx: Int = 0,
+        screenHeightPx: Int = 0,
+        scanBoxLeft: Int = 0,
+        scanBoxTop: Int = 0,
+        scanBoxRight: Int = 0,
+        scanBoxBottom: Int = 0,
+        onResult: (AnalysisResult) -> Unit
+    ) {
         viewModelScope.launch {
             _uiState.value = UiState.Processing
-            ocrEngine.recognizeText(bitmap, rotationDegrees)
+            ocrEngine.recognizeText(
+                bitmap, rotationDegrees,
+                screenWidthPx, screenHeightPx,
+                scanBoxLeft, scanBoxTop, scanBoxRight, scanBoxBottom
+            )
                 .onSuccess { text ->
                     val result = analyzeUseCase.execute(text)
                     _uiState.value = UiState.Idle
