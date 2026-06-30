@@ -62,8 +62,6 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.isitveganapp.domain.model.AnalysisResult
-import com.isitveganapp.ui.theme.Brand100
-import com.isitveganapp.ui.theme.Brand700
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -292,13 +290,13 @@ private fun PermissionScreen(showRationale: Boolean, onRequest: () -> Unit) {
                 modifier = Modifier
                     .size(120.dp)
                     .clip(CircleShape)
-                    .background(Brand100),
+                    .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.PhotoCamera,
                     contentDescription = null,
-                    tint = Brand700,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(56.dp)
                 )
             }
@@ -332,7 +330,7 @@ private fun PermissionScreen(showRationale: Boolean, onRequest: () -> Unit) {
                     .height(56.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Brand700
+                    containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Text(

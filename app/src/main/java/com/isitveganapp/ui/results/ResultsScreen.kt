@@ -52,15 +52,7 @@ import java.util.Locale
 import com.isitveganapp.data.model.VeganStatus
 import com.isitveganapp.domain.model.AnalysisResult
 import com.isitveganapp.domain.model.IngredientFinding
-import com.isitveganapp.ui.theme.Brand700
-import com.isitveganapp.ui.theme.DangerRed
-import com.isitveganapp.ui.theme.DangerRedSurface
-import com.isitveganapp.ui.theme.Gray500
-import com.isitveganapp.ui.theme.Gray700
-import com.isitveganapp.ui.theme.VeganGreen
-import com.isitveganapp.ui.theme.VeganGreenSurface
-import com.isitveganapp.ui.theme.WarnAmber
-import com.isitveganapp.ui.theme.WarnAmberSurface
+import com.isitveganapp.ui.theme.appColors
 
 @Composable
 fun ResultsScreen(
@@ -92,6 +84,7 @@ fun ResultsScreen(
         )
     }
 
+    val appColors = MaterialTheme.appColors
     var showRawText by remember { mutableStateOf(false) }
     var feedbackGiven by remember { mutableStateOf<Boolean?>(null) }
 
@@ -168,7 +161,7 @@ fun ResultsScreen(
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(14.dp))
-                            .background(VeganGreenSurface)
+                            .background(appColors.veganGreenSurface)
                             .padding(horizontal = 16.dp, vertical = 14.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -176,13 +169,13 @@ fun ResultsScreen(
                         Icon(
                             imageVector = Icons.Default.CheckCircle,
                             contentDescription = null,
-                            tint = VeganGreen,
+                            tint = appColors.veganGreen,
                             modifier = Modifier.size(22.dp)
                         )
                         Text(
                             text = "No non-vegan ingredients detected",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = VeganGreen,
+                            color = appColors.veganGreen,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -232,7 +225,7 @@ fun ResultsScreen(
                             Text(
                                 text = "Was this result correct?",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = Gray500
+                                color = appColors.textTertiary
                             )
                             Spacer(modifier = Modifier.width(16.dp))
                             IconButton(
@@ -242,7 +235,7 @@ fun ResultsScreen(
                                 Icon(
                                     imageVector = Icons.Default.ThumbUp,
                                     contentDescription = "Correct",
-                                    tint = VeganGreen,
+                                    tint = appColors.veganGreen,
                                     modifier = Modifier.size(22.dp)
                                 )
                             }
@@ -253,7 +246,7 @@ fun ResultsScreen(
                                 Icon(
                                     imageVector = Icons.Default.ThumbDown,
                                     contentDescription = "Incorrect",
-                                    tint = DangerRed,
+                                    tint = appColors.dangerRed,
                                     modifier = Modifier.size(22.dp)
                                 )
                             }
@@ -261,7 +254,7 @@ fun ResultsScreen(
                             Text(
                                 text = "Thanks for your feedback!",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = Gray500
+                                color = appColors.textTertiary
                             )
                         }
                     }
@@ -278,7 +271,7 @@ fun ResultsScreen(
                         .padding(horizontal = 16.dp)
                         .height(56.dp),
                     shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Brand700)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
                     Text(
                         text = "Scan Another Product",
@@ -294,7 +287,7 @@ fun ResultsScreen(
                         Text(
                             text = if (showRawText) "Hide Raw Scanned Text" else "Show Raw Scanned Text",
                             style = MaterialTheme.typography.labelMedium,
-                            color = Gray500
+                            color = appColors.textTertiary
                         )
                     }
                     if (showRawText) {
@@ -304,7 +297,7 @@ fun ResultsScreen(
                                 text = result.rawText.ifBlank { "(no text recognized)" },
                                 style = MaterialTheme.typography.bodySmall,
                                 fontFamily = FontFamily.Monospace,
-                                color = Gray700,
+                                color = appColors.textSecondary,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(12.dp))
@@ -335,7 +328,7 @@ private fun SectionHeader(title: String) {
     Text(
         text = title.uppercase(Locale.getDefault()),
         style = MaterialTheme.typography.labelMedium,
-        color = Gray500,
+        color = MaterialTheme.appColors.textTertiary,
         letterSpacing = 0.8.sp,
         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 10.dp)
     )
@@ -343,10 +336,11 @@ private fun SectionHeader(title: String) {
 
 @Composable
 private fun IngredientFindingCard(finding: IngredientFinding, modifier: Modifier = Modifier) {
+    val appColors = MaterialTheme.appColors
     val (accentColor, surfaceColor) = when (finding.veganStatus) {
-        VeganStatus.NOT_VEGAN -> DangerRed to DangerRedSurface
-        VeganStatus.UNCERTAIN -> WarnAmber to WarnAmberSurface
-        VeganStatus.VEGAN     -> VeganGreen to VeganGreenSurface
+        VeganStatus.NOT_VEGAN -> appColors.dangerRed to appColors.dangerRedSurface
+        VeganStatus.UNCERTAIN -> appColors.warnAmber to appColors.warnAmberSurface
+        VeganStatus.VEGAN     -> appColors.veganGreen to appColors.veganGreenSurface
     }
 
     Row(
@@ -372,7 +366,7 @@ private fun IngredientFindingCard(finding: IngredientFinding, modifier: Modifier
             Text(
                 text = finding.ingredient.reason,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Gray700
+                color = appColors.textSecondary
             )
         }
     }
