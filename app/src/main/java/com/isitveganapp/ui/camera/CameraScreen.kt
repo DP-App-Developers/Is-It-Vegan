@@ -139,7 +139,7 @@ fun CameraScreen(
                 .padding(horizontal = 24.dp, vertical = 20.dp)
         ) {
             Text(
-                text = "IsItVegan",
+                text = "Is It Vegan",
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
