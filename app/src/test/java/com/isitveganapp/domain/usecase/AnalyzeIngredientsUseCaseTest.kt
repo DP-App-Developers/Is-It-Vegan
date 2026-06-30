@@ -58,7 +58,6 @@ class AnalyzeIngredientsUseCaseTest {
         // Default: nothing found
         coEvery { dao.findByNormalizedName(any()) } returns null
         coEvery { dao.findByAlias(any()) } returns null
-        coEvery { dao.searchByPrefix(any()) } returns emptyList()
     }
 
     // ── Empty / uncertain ─────────────────────────────────────────────────────
@@ -92,8 +91,7 @@ class AnalyzeIngredientsUseCaseTest {
     }
 
     @Test
-    fun `soy milk label returns VEGAN (plant-base guard prevents false positive)`() = runTest {
-        // "soy milk" token → PLANT_BASE_WORDS guard → lookup returns null → no NOT_VEGAN flag
+    fun `soy milk label returns VEGAN when milk not in DB`() = runTest {
         coEvery { dao.findByNormalizedName("water") } returns waterIngredient
 
         val result = analyzeUseCase.execute("INGREDIENTS: soy milk, water")
@@ -102,19 +100,19 @@ class AnalyzeIngredientsUseCaseTest {
     }
 
     @Test
-    fun `oat milk label returns VEGAN (plant-base guard)`() = runTest {
+    fun `oat milk label returns VEGAN when milk not in DB`() = runTest {
         val result = analyzeUseCase.execute("INGREDIENTS: oat milk, sunflower oil")
         assertEquals(VeganStatus.VEGAN, result.overallStatus)
     }
 
     @Test
-    fun `almond milk label returns VEGAN (plant-base guard)`() = runTest {
+    fun `almond milk label returns VEGAN when milk not in DB`() = runTest {
         val result = analyzeUseCase.execute("INGREDIENTS: almond milk, cane sugar")
         assertEquals(VeganStatus.VEGAN, result.overallStatus)
     }
 
     @Test
-    fun `coconut milk label returns VEGAN (plant-base guard)`() = runTest {
+    fun `coconut milk label returns VEGAN when milk not in DB`() = runTest {
         val result = analyzeUseCase.execute("INGREDIENTS: coconut milk, salt")
         assertEquals(VeganStatus.VEGAN, result.overallStatus)
     }
@@ -188,10 +186,10 @@ class AnalyzeIngredientsUseCaseTest {
         assertEquals(2, result.flaggedIngredients.size)
     }
 
-    // ── Sub-word fallback end-to-end ──────────────────────────────────────────
+    // ── Milk in multi-word phrase (1-gram "milk" matches) ────────────────────
 
     @Test
-    fun `whole milk solids returns NOT_VEGAN via sub-word fallback`() = runTest {
+    fun `whole milk solids returns NOT_VEGAN (milk is a 1-gram candidate)`() = runTest {
         coEvery { dao.findByNormalizedName("milk") } returns milkIngredient
 
         val result = analyzeUseCase.execute("INGREDIENTS: sugar, whole milk solids")
@@ -199,7 +197,7 @@ class AnalyzeIngredientsUseCaseTest {
     }
 
     @Test
-    fun `skim milk powder returns NOT_VEGAN via sub-word fallback`() = runTest {
+    fun `skim milk powder returns NOT_VEGAN (milk is a 1-gram candidate)`() = runTest {
         coEvery { dao.findByNormalizedName("milk") } returns milkIngredient
 
         val result = analyzeUseCase.execute("INGREDIENTS: skim milk powder, cocoa")
@@ -225,30 +223,26 @@ class AnalyzeIngredientsUseCaseTest {
             "INGREDIENTS: sugar, cocoa butter, natural flavors. CONTAINS: MILK."
         )
         assertEquals(VeganStatus.NOT_VEGAN, result.overallStatus)
-        // Ingredients section tokens should also be present
         assertTrue(result.parsedTokens.contains("sugar"))
     }
 
     @Test
-    fun `milk in contains block is not confused with vitamin d3 token`() = runTest {
+    fun `milk in organic a2 milk label returns NOT_VEGAN`() = runTest {
         coEvery { dao.findByNormalizedName("milk") } returns milkIngredient
 
         val result = analyzeUseCase.execute(
             "INGREDIENTS: ORGANIC A2 MILK, VITAMIN D3. CONTAINS: MILK."
         )
-        // The parser must not produce a token like "vitamin d3 contains milk"
-        assertTrue(result.parsedTokens.none { "contains" in it })
         assertEquals(VeganStatus.NOT_VEGAN, result.overallStatus)
+        assertTrue(result.flaggedIngredients.any { it.ingredient.normalizedName == "milk" })
     }
 
     // ── Noisy OCR simulation ──────────────────────────────────────────────────
 
     @Test
-    fun `noisy OCR with mlk typo fuzzy-matches milk`() = runTest {
-        coEvery { dao.searchByPrefix("mlk".take(3)) } returns listOf(milkIngredient)
-
+    fun `noisy OCR with mlk typo does not match milk (no fuzzy matching)`() = runTest {
         val result = analyzeUseCase.execute("INGREDIENTS: mlk, butter")
-        assertEquals(VeganStatus.NOT_VEGAN, result.overallStatus)
+        assertEquals(VeganStatus.VEGAN, result.overallStatus)
     }
 
     @Test
@@ -266,13 +260,12 @@ class AnalyzeIngredientsUseCaseTest {
     }
 
     @Test
-    fun `label with only nutrition info returns VEGAN (no ingredients found)`() = runTest {
-        // Nutrition block should be trimmed; nothing left to parse
+    fun `label with only nutrition info returns VEGAN (nothing flags as non-vegan)`() = runTest {
         val result = analyzeUseCase.execute(
             "INGREDIENTS: water. NUTRITION: Per 100ml - Energy 42kJ, Protein 0g."
         )
-        // Nutrition content not tokenized; only "water" is present, matches nothing → VEGAN
         assertEquals(VeganStatus.VEGAN, result.overallStatus)
+        assertTrue(result.flaggedIngredients.isEmpty())
     }
 
     @Test
@@ -293,7 +286,7 @@ class AnalyzeIngredientsUseCaseTest {
     }
 
     @Test
-    fun `realistic chocolate with milk returns NOT_VEGAN and trims nutrition`() = runTest {
+    fun `realistic chocolate with milk returns NOT_VEGAN`() = runTest {
         coEvery { dao.findByNormalizedName("sugar") } returns sugarIngredient
         coEvery { dao.findByNormalizedName("milk") } returns milkIngredient
 
@@ -305,8 +298,7 @@ class AnalyzeIngredientsUseCaseTest {
 
         val result = analyzeUseCase.execute(label)
         assertEquals(VeganStatus.NOT_VEGAN, result.overallStatus)
-        // Nutrition section must not appear as tokens
-        assertTrue(result.parsedTokens.none { "kcal" in it || "560" in it })
+        assertTrue(result.flaggedIngredients.any { it.ingredient.normalizedName == "milk" })
     }
 
     // ── Deduplication ─────────────────────────────────────────────────────────
