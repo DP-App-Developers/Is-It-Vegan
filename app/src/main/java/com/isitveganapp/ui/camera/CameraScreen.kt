@@ -1,6 +1,7 @@
 package com.isitveganapp.ui.camera
 
 import android.Manifest
+import android.graphics.Bitmap
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -9,6 +10,7 @@ import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -54,11 +56,13 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -124,6 +128,16 @@ fun CameraScreen(
 
     val isProcessing = uiState is CameraViewModel.UiState.Processing
 
+    val previewHolder = remember { arrayOfNulls<PreviewView>(1) }
+    var frozenBitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    LaunchedEffect(isProcessing) {
+        if (!isProcessing) {
+            frozenBitmap?.recycle()
+            frozenBitmap = null
+        }
+    }
+
     var scanBoxLeft by remember { mutableStateOf(0) }
     var scanBoxTop by remember { mutableStateOf(0) }
     var scanBoxRight by remember { mutableStateOf(0) }
@@ -138,10 +152,20 @@ fun CameraScreen(
                     controller = cameraController
                     implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                     scaleType = PreviewView.ScaleType.FILL_CENTER
-                }
+                }.also { previewHolder[0] = it }
             },
             modifier = Modifier.fillMaxSize()
         )
+
+        // Frozen frame shown while processing so the preview stops moving
+        frozenBitmap?.let { bmp ->
+            Image(
+                bitmap = bmp.asImageBitmap(),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        }
 
         // Top gradient + wordmark
         Box(
@@ -284,6 +308,7 @@ fun CameraScreen(
                                 .clip(CircleShape)
                                 .background(Color.White)
                                 .clickable {
+                                    frozenBitmap = previewHolder[0]?.bitmap
                                     viewModel.onShutterPressed()
                                     cameraController.takePicture(
                                         captureExecutor,
