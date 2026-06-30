@@ -292,7 +292,7 @@ fun ResultsScreen(
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     TextButton(onClick = { showRawText = !showRawText }) {
                         Text(
-                            text = if (showRawText) "Hide Raw OCR Text" else "Show Raw OCR Text",
+                            text = if (showRawText) "Hide Raw Scanned Text" else "Show Raw Scanned Text",
                             style = MaterialTheme.typography.labelMedium,
                             color = Gray500
                         )
