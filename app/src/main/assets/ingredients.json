@@ -2,7 +2,7 @@
   {
     "displayName": "Gelatin",
     "normalizedName": "gelatin",
-    "aliases": "gelatine|e441|hydrolyzed collagen|collagen",
+    "aliases": "gelatine|e441|hydrolyzed collagen|collagen|collagen peptides|marine collagen|bovine collagen|hydrolyzed collagen peptides|collagen hydrolysate",
     "veganStatus": "NOT_VEGAN",
     "reason": "Derived from boiled animal bones, skin, and connective tissue (cattle, pigs)"
   },
@@ -16,14 +16,14 @@
   {
     "displayName": "Casein",
     "normalizedName": "casein",
-    "aliases": "caseinate|sodium caseinate|calcium caseinate|potassium caseinate|ammonium caseinate",
+    "aliases": "caseinate|sodium caseinate|calcium caseinate|potassium caseinate|ammonium caseinate|micellar casein|casein micelles|hydrolyzed casein|casein hydrolysate",
     "veganStatus": "NOT_VEGAN",
     "reason": "Main protein in cow's milk"
   },
   {
     "displayName": "Whey",
     "normalizedName": "whey",
-    "aliases": "whey powder|whey protein|whey concentrate|whey isolate|sweet whey|acid whey",
+    "aliases": "whey powder|whey protein|whey concentrate|whey isolate|sweet whey|acid whey|wpc|wpi|whey permeate|delactosed whey|whey protein concentrate|whey protein isolate",
     "veganStatus": "NOT_VEGAN",
     "reason": "Liquid by-product of cheese making, from cow's milk"
   },
@@ -156,14 +156,14 @@
   {
     "displayName": "Milk",
     "normalizedName": "milk",
-    "aliases": "whole milk|skim milk|skimmed milk|full fat milk|dried milk|milk solids|milk powder|nonfat milk|semi skimmed milk|cow milk|cows milk|cow's milk",
+    "aliases": "whole milk|skim milk|skimmed milk|full fat milk|dried milk|milk solids|milk powder|nonfat milk|semi skimmed milk|cow milk|cows milk|cow's milk|skim milk powder|nonfat dry milk|non-fat dry milk|milk protein concentrate|milk protein isolate|mpc|mpi|non-fat milk solids|milk derivative|milk proteins|milk extract",
     "veganStatus": "NOT_VEGAN",
     "reason": "Dairy product from cows"
   },
   {
     "displayName": "Butter",
     "normalizedName": "butter",
-    "aliases": "butterfat|butter oil|clarified butter|ghee|anhydrous butter",
+    "aliases": "butterfat|butter oil|clarified butter|ghee|anhydrous butter|anhydrous milk fat|butter fat|milk fat",
     "veganStatus": "NOT_VEGAN",
     "reason": "Dairy fat from cow's milk"
   },
@@ -226,7 +226,7 @@
   {
     "displayName": "Omega-3 Fatty Acids",
     "normalizedName": "omega 3",
-    "aliases": "fish oil|cod liver oil|dha|epa|omega3",
+    "aliases": "fish oil|cod liver oil|dha|epa|omega3|krill oil|krill|krill extract",
     "veganStatus": "NOT_VEGAN",
     "reason": "Typically derived from fish oil unless labelled as algal/plant-based"
   },
@@ -600,5 +600,82 @@
     "aliases": "pancreatin|animal protease|porcine trypsin",
     "veganStatus": "NOT_VEGAN",
     "reason": "Digestive enzyme extracted from pig or bovine pancreas"
+  },
+  {
+    "displayName": "Natural Flavors",
+    "normalizedName": "natural flavors",
+    "aliases": "natural flavor|natural flavour|natural flavours|natural flavoring|natural flavouring|natural extract",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Can be derived from any natural source including meat, fish, dairy, or eggs. Contact the manufacturer to confirm the source."
+  },
+  {
+    "displayName": "Taurine",
+    "normalizedName": "taurine",
+    "aliases": "2-aminoethanesulfonic acid|2 aminoethanesulfonic acid",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Historically extracted from ox bile; supplement form is now often synthetic but source is rarely specified on the label."
+  },
+  {
+    "displayName": "L-Carnitine",
+    "normalizedName": "l carnitine",
+    "aliases": "carnitine|l-carnitine tartrate|acetyl l-carnitine|alcar|levocarnitine|acetyl carnitine",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Primarily found in meat and fish; supplement form may be synthetic or animal-derived."
+  },
+  {
+    "displayName": "Glucosamine",
+    "normalizedName": "glucosamine",
+    "aliases": "glucosamine sulphate|glucosamine sulfate|glucosamine hydrochloride|glucosamine hcl|n-acetyl glucosamine|n acetyl glucosamine",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Usually derived from shellfish shells (shrimp, crab, lobster). Vegan versions from fermented corn exist but are rare."
+  },
+  {
+    "displayName": "Vitamin A",
+    "normalizedName": "vitamin a",
+    "aliases": "retinol|retinyl palmitate|retinyl acetate|retinoic acid|retinal|vitamin a palmitate|vitamin a acetate|retinol palmitate",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Retinol is typically derived from fish liver oil or animal sources. Check label for plant-based alternatives."
+  },
+  {
+    "displayName": "Magnesium Stearate",
+    "normalizedName": "magnesium stearate",
+    "aliases": "magnesium salt of stearic acid|calcium stearate|zinc stearate|sodium stearate",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Stearic acid component can be from animal or vegetable fat. Very common in supplements and tablets."
+  },
+  {
+    "displayName": "Lipase",
+    "normalizedName": "lipase",
+    "aliases": "animal lipase|pancreatic lipase|pregastric lipase|kid lipase|calf lipase|lamb lipase",
+    "veganStatus": "UNCERTAIN",
+    "reason": "Enzyme used in cheese and baked goods; can be from calf, kid, or lamb stomachs, or from fungal/bacterial sources."
+  },
+  {
+    "displayName": "Castoreum",
+    "normalizedName": "castoreum",
+    "aliases": "beaver extract|castoreum extract|castoreum absolute",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Secretion from beaver anal scent glands, historically used as a natural flavoring."
+  },
+  {
+    "displayName": "Blood",
+    "normalizedName": "blood",
+    "aliases": "dried blood|blood plasma|plasma protein|blood powder|animal blood|porcine blood|bovine blood|blood meal",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Animal blood used in some processed meats and sausages"
+  },
+  {
+    "displayName": "Bee Pollen",
+    "normalizedName": "bee pollen",
+    "aliases": "pollen|flower pollen|bee bread|bee collected pollen",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Pollen collected by honeybees"
+  },
+  {
+    "displayName": "Elastin",
+    "normalizedName": "elastin",
+    "aliases": "hydrolyzed elastin|animal elastin|bovine elastin|elastin protein|soluble elastin",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Structural protein from animal connective tissue, used in some protein supplements"
   }
 ]
