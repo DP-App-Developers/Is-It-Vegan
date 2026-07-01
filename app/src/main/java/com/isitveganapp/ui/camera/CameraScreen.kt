@@ -388,7 +388,7 @@ private fun PermissionScreen(showRationale: Boolean, onRequest: () -> Unit) {
                 text = if (showRationale)
                     "Camera access is needed to photograph ingredient lists and check if products are vegan."
                 else
-                    "IsItVegan uses your camera to scan ingredient labels and instantly tell you if a product is vegan.",
+                    "Is It Vegan app uses your camera to scan ingredient labels and instantly tell you if a product is vegan.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
