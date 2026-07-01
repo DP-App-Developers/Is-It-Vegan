@@ -193,7 +193,7 @@ fun CameraScreen(
             val density = LocalDensity.current
             val screenW = constraints.maxWidth.toFloat()
             val screenH = constraints.maxHeight.toFloat()
-            val boxW = screenW * 0.85f
+            val boxW = (screenW * 0.85f).coerceAtMost(with(density) { 500.dp.toPx() })
             val boxH = boxW / 2.8f * 1.5f
             val boxLeft = (screenW - boxW) / 2f
             val boxTop = (screenH - boxH) / 2f
