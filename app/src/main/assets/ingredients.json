@@ -30,7 +30,7 @@
   {
     "displayName": "Lecithin",
     "normalizedName": "lecithin",
-    "aliases": "e322|egg lecithin|sunflower lecithin|soy lecithin|soya lecithin",
+    "aliases": "e322|egg lecithin",
     "veganStatus": "UNCERTAIN",
     "reason": "Can be soy-derived (vegan) or egg/animal-derived. Check the source listed on the label."
   },

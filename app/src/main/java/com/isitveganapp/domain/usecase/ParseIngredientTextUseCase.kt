@@ -22,6 +22,8 @@ class ParseIngredientTextUseCase @Inject constructor() {
         "peanut butter", "almond butter", "cashew butter", "sunflower butter",
         "cocoa butter", "cacao butter", "nut butter", "seed butter",
         "walnut butter", "hazelnut butter", "pistachio butter", "macadamia butter",
+        // Plant-based lecithins (lecithin alone is UNCERTAIN; these are vegan)
+        "sunflower lecithin", "soy lecithin", "soya lecithin",
     )
 
     fun execute(rawOcrText: String): List<String> {
