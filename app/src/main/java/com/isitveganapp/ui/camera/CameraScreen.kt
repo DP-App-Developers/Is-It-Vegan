@@ -1,7 +1,10 @@
 package com.isitveganapp.ui.camera
 
 import android.Manifest
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.Settings
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -100,10 +103,23 @@ fun CameraScreen(
         }
     }
 
+    var hasRequestedPermission by remember { mutableStateOf(false) }
+
     if (!cameraPermission.status.isGranted) {
+        val permanentlyDenied = hasRequestedPermission && !cameraPermission.status.shouldShowRationale
         PermissionScreen(
-            showRationale = cameraPermission.status.shouldShowRationale,
-            onRequest = { cameraPermission.launchPermissionRequest() }
+            onRequest = {
+                if (permanentlyDenied) {
+                    context.startActivity(
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", context.packageName, null)
+                        }
+                    )
+                } else {
+                    hasRequestedPermission = true
+                    cameraPermission.launchPermissionRequest()
+                }
+            }
         )
         return
     }
@@ -247,19 +263,17 @@ fun CameraScreen(
                 drawLine(Color.White, Offset(x1, y1 - cLen), Offset(x1, y1), sw, StrokeCap.Round)
             }
 
-            // Instruction label sits just below the scan window
-            Box(
+            // Instruction label anchored to the bottom of the scan window
+            Text(
+                text = "Fit all English ingredients inside the box",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .offset(y = with(density) { boxH.toDp() } / 2 + 20.dp)
-            ) {
-                Text(
-                    text = "Fit all ingredients inside the box",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White.copy(alpha = 0.8f),
-                    textAlign = TextAlign.Center
-                )
-            }
+                    .align(Alignment.TopCenter)
+                    .offset(y = with(density) { (boxTop + boxH).toDp() } + 10.dp)
+                    .padding(horizontal = 20.dp)
+            )
         }
 
         // Bottom gradient + shutter
@@ -349,7 +363,7 @@ fun CameraScreen(
 }
 
 @Composable
-private fun PermissionScreen(showRationale: Boolean, onRequest: () -> Unit) {
+private fun PermissionScreen(onRequest: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -387,10 +401,7 @@ private fun PermissionScreen(showRationale: Boolean, onRequest: () -> Unit) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = if (showRationale)
-                    "Camera access is needed to photograph ingredient lists and check if products are vegan."
-                else
-                    "Is It Vegan app uses your camera to scan ingredient labels and instantly tell you if a product is vegan.",
+                text = "Is It Vegan uses your camera to scan English ingredient labels and instantly tell you if a product is vegan.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
