@@ -76,15 +76,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import java.util.concurrent.Executors
+import android.app.Activity
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import com.isitveganapp.domain.model.AnalysisResult
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraScreen(
     viewModel: CameraViewModel = hiltViewModel(),
@@ -94,7 +97,6 @@ fun CameraScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    val cameraPermission = rememberPermissionState(Manifest.permission.CAMERA)
 
     LaunchedEffect(uiState) {
         if (uiState is CameraViewModel.UiState.Error) {
@@ -103,22 +105,48 @@ fun CameraScreen(
         }
     }
 
-    var hasRequestedPermission by remember { mutableStateOf(false) }
+    var cameraGranted by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+    var permanentlyDenied by remember { mutableStateOf(false) }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        cameraGranted = granted
+        if (!granted) {
+            permanentlyDenied = !ActivityCompat.shouldShowRequestPermissionRationale(
+                context as Activity, Manifest.permission.CAMERA
+            )
+        }
+    }
 
-    if (!cameraPermission.status.isGranted) {
-        val permanentlyDenied = hasRequestedPermission && !cameraPermission.status.shouldShowRationale
+    // Re-check on resume so that granting/revoking from Settings is reflected immediately.
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                cameraGranted = ContextCompat.checkSelfPermission(
+                    context, Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    val openSettings = {
+        context.startActivity(
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", context.packageName, null)
+            }
+        )
+    }
+
+    if (!cameraGranted) {
         PermissionScreen(
-            onRequest = {
-                if (permanentlyDenied) {
-                    context.startActivity(
-                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", context.packageName, null)
-                        }
-                    )
-                } else {
-                    hasRequestedPermission = true
-                    cameraPermission.launchPermissionRequest()
-                }
+            onClick = if (permanentlyDenied) openSettings else {
+                { permissionLauncher.launch(Manifest.permission.CAMERA) }
             }
         )
         return
@@ -363,7 +391,7 @@ fun CameraScreen(
 }
 
 @Composable
-private fun PermissionScreen(onRequest: () -> Unit) {
+private fun PermissionScreen(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -401,7 +429,7 @@ private fun PermissionScreen(onRequest: () -> Unit) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Is It Vegan uses your camera to scan English ingredient labels and instantly tell you if a product is vegan.",
+                text = "Use your camera to scan ingredient labels in English and instantly find out whether a product is vegan.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -410,7 +438,7 @@ private fun PermissionScreen(onRequest: () -> Unit) {
             Spacer(modifier = Modifier.height(40.dp))
 
             Button(
-                onClick = onRequest,
+                onClick = onClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -424,6 +452,7 @@ private fun PermissionScreen(onRequest: () -> Unit) {
                     style = MaterialTheme.typography.titleSmall
                 )
             }
+
         }
     }
 }
