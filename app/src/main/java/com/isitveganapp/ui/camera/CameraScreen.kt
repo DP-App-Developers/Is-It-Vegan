@@ -293,7 +293,7 @@ fun CameraScreen(
 
             // Instruction label anchored to the bottom of the scan window
             Text(
-                text = "Fit all English ingredients inside the box",
+                text = "Fit all ingredients inside the box",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.White.copy(alpha = 0.8f),
                 textAlign = TextAlign.Center,
