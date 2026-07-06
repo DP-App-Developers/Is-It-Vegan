@@ -331,7 +331,7 @@
   {
     "displayName": "Fish",
     "normalizedName": "fish",
-    "aliases": "fish meat|fish fillet|fish flesh|fish extract|fish broth|fish stock|fish powder|fish oil|fish meal|white fish|oily fish|dried fish|smoked fish",
+    "aliases": "fish meat|steelhead fillet|fish fillet|fish flesh|fish extract|fish broth|fish stock|fish powder|fish oil|fish meal|white fish|oily fish|dried fish|smoked fish",
     "veganStatus": "NOT_VEGAN",
     "reason": "Flesh of fish"
   },
