@@ -38,7 +38,7 @@ class ParseIngredientTextUseCase @Inject constructor() {
         // Longer n-grams spanning those positions are still emitted normally.
         val suppressed = BooleanArray(words.size)
         for (i in words.indices) {
-            for (len in 2..3) {
+            for (len in 2..4) {
                 if (i + len > words.size) break
                 val phrase = words.subList(i, i + len).joinToString(" ")
                 if (phrase in veganCompounds) {
@@ -47,9 +47,9 @@ class ParseIngredientTextUseCase @Inject constructor() {
             }
         }
 
-        val candidates = ArrayList<String>(words.size * 3)
+        val candidates = ArrayList<String>(words.size * 4)
         for (i in words.indices) {
-            for (len in 1..3) {
+            for (len in 1..4) {
                 if (i + len > words.size) break
                 if (len == 1 && suppressed[i]) continue
                 candidates.add(words.subList(i, i + len).joinToString(" "))

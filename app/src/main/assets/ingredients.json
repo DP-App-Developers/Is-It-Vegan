@@ -86,7 +86,7 @@
   {
     "displayName": "L-Cysteine",
     "normalizedName": "l cysteine",
-    "aliases": "e920|cysteine|cystine|l-cysteine hydrochloride",
+    "aliases": "e920|cysteine|cystine|l cysteine hydrochloride",
     "veganStatus": "UNCERTAIN",
     "reason": "Often sourced from human hair or duck feathers; sometimes synthetic. Check with manufacturer."
   },
@@ -100,7 +100,7 @@
   {
     "displayName": "Albumin",
     "normalizedName": "albumin",
-    "aliases": "egg albumin|blood albumin|serum albumin|egg white",
+    "aliases": "egg albumin|blood albumin|serum albumin|egg white|albumen|egg albumen|whole eggs|free range eggs|free range egg|pasteurized eggs|pasteurized egg|dried whole egg",
     "veganStatus": "NOT_VEGAN",
     "reason": "Protein found in egg whites or animal blood"
   },
@@ -156,7 +156,7 @@
   {
     "displayName": "Milk",
     "normalizedName": "milk",
-    "aliases": "whole milk|skim milk|skimmed milk|full fat milk|dried milk|milk solids|milk powder|nonfat milk|semi skimmed milk|cow milk|cows milk|cow's milk|skim milk powder|nonfat dry milk|non-fat dry milk|milk protein concentrate|milk protein isolate|mpc|mpi|non-fat milk solids|milk derivative|milk proteins|milk extract",
+    "aliases": "whole milk|skim milk|skimmed milk|full fat milk|dried milk|milk solids|milk powder|nonfat milk|semi skimmed milk|cow milk|cows milk|cow s milk|skim milk powder|nonfat dry milk|non fat dry milk|milk protein concentrate|milk protein isolate|mpc|mpi|non fat milk solids|non fat milk powder|non fat milk|milk derivative|milk proteins|milk extract|reduced fat milk|low fat milk|fat free milk|semi skim milk|cultured milk|pasteurized milk|ultra pasteurized milk|ultra high temperature milk|uht milk|lactose free milk|a2 milk|whole milk powder|full cream milk|full cream milk powder|milk fat solids",
     "veganStatus": "NOT_VEGAN",
     "reason": "Dairy product from cows"
   },
@@ -177,7 +177,7 @@
   {
     "displayName": "Cheese",
     "normalizedName": "cheese",
-    "aliases": "cheese powder|cheddar|parmesan|mozzarella|processed cheese",
+    "aliases": "cheese powder|cheddar|parmesan|mozzarella|processed cheese|feta|brie|camembert|gouda|gruyere|gruyere cheese|edam|emmental|emmentaler|provolone|gorgonzola|blue cheese|stilton|pecorino|paneer|halloumi|haloumi|manchego|asiago|fontina|colby|monterey jack|pepper jack|swiss cheese|american cheese|queso|queso fresco|queso blanco|cheese slice|cheese slices|natural cheese",
     "veganStatus": "NOT_VEGAN",
     "reason": "Dairy product made from animal milk"
   },
@@ -677,5 +677,40 @@
     "aliases": "hydrolyzed elastin|animal elastin|bovine elastin|elastin protein|soluble elastin",
     "veganStatus": "NOT_VEGAN",
     "reason": "Structural protein from animal connective tissue, used in some protein supplements"
+  },
+  {
+    "displayName": "Yogurt",
+    "normalizedName": "yogurt",
+    "aliases": "yoghurt|yoghourt|greek yogurt|greek yoghurt|natural yogurt|natural yoghurt|low fat yogurt|low fat yoghurt|fat free yogurt|full fat yogurt|plain yogurt|plain yoghurt|frozen yogurt|yogurt powder|dried yogurt|live yogurt|bio yogurt|probiotic yogurt|skyr|icelandic yogurt",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fermented dairy product made from animal milk"
+  },
+  {
+    "displayName": "Kefir",
+    "normalizedName": "kefir",
+    "aliases": "milk kefir|kefir milk|kefir powder|kefir culture|fermented milk drink",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Fermented dairy drink made from cow's or goat's milk"
+  },
+  {
+    "displayName": "Ricotta",
+    "normalizedName": "ricotta",
+    "aliases": "ricotta cheese|part skim ricotta|whole milk ricotta|fresh ricotta|ricotta salata",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Italian fresh dairy cheese made from whey"
+  },
+  {
+    "displayName": "Mascarpone",
+    "normalizedName": "mascarpone",
+    "aliases": "mascarpone cheese|italian cream cheese",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Italian fresh dairy cheese made from cream"
+  },
+  {
+    "displayName": "Quark",
+    "normalizedName": "quark",
+    "aliases": "quark cheese|fromage frais|fromage blanc|curd cheese|fresh curd cheese|low fat quark|cream curd|quarg",
+    "veganStatus": "NOT_VEGAN",
+    "reason": "Soft fresh dairy cheese made from milk"
   }
 ]
